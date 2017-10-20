@@ -1,0 +1,37 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "br.com.hoseki"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "br.com.hoseki"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "br.com.hoseki"
+        },
+        "cordova-pdf-generator": {
+            "PACKAGE_NAME": "br.com.hoseki"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "br.com.hoseki"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "br.com.hoseki"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "br.com.hoseki"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "br.com.hoseki"
+        }
+    }
+}

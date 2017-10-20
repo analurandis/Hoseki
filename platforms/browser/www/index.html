@@ -1,0 +1,375 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta http-equiv="Access-Control-Allow-Headers" content="Content-Type" />
+    <meta http-equiv="Access-Control-Allow-Methods" content="POST" />
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--<link rel="apple-touch-icon" href="images/apple-touch-icon.png" />-->
+    <link rel="apple-touch-startup-image" href="images/apple-touch-startup-image-320x460.png" />
+    <title>Hoseki - Business Intermediation</title>
+    <link rel="stylesheet" href="css/framework7.css">
+    <link rel="stylesheet" href="style.css">
+    <link type="text/css" rel="stylesheet" href="css/swipebox.css" />
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700,900' rel='stylesheet' type='text/css'>
+    <link href="css/framework7-icons.css" rel="stylesheet" />
+    <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body id="mobile_wrap">
+
+    <div class="statusbar-overlay"></div>
+
+    <div class="panel-overlay"></div>
+
+    <div class="panel panel-left panel-cover">
+        <nav class="list-nav">
+
+            <ul>
+                <li class="home-icon"><a href="index.html" onclick="renderPaginaInicial()" class="close-panel">Pagina Inicial</a></li>
+                <li class="contact-icon"><a href="about.html" class="close-panel">Rede</a></li>
+                <li class="contact-icon"><a href="fatura.html" onclick="renderFatura()" class="close-panel">Fatura</a></li>
+                <li class="blog-icon"><a href="#" class="close-panel">Financeiro</a></li>
+                <li class="video-icon"><a href="#" class="close-panel">Meus Dados</a></li>
+                <li class="logout-icon"><a href="#" onclick="fecharApp()" class="close-panel">Sair</a></li>
+            </ul>
+            <img class="menu-logo" src="images/logo_hoseki.png" />
+        </nav>
+    </div>
+
+
+
+    <div class="views">
+        <div class="view view-main">
+
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="left sliding"><div class="logo_title">Hoseki</div></div>
+                    <div class="right menu_open_icon"><a href="#" data-panel="left" class="link icon-only open-panel"></a></div>
+                </div>
+            </div>
+
+            <div class="pages navbar-through toolbar-through">
+
+                <div data-page="index" class="page homepage">
+                    <div class="page-content">
+
+                        <div class="swiper-container swiper-init" data-effect="coverflow" data-pagination=".swiper-pagination">
+                            <div class="swiper-wrapper">
+
+
+                                <div id="pages_maincontent">
+                                    <ul class="features_list_detailed retorno">
+
+                                        <li>
+                                            <div class="feat_small_icon">
+                                                <img src="images/plano.png" alt="" title="" />
+                                            </div>
+                                            <div class="feat_small_details">
+                                                <h4>Plano Atual</h4>
+                                                <p id="plano-atual"> </p>
+
+
+
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div class="feat_small_icon"><div class="sumary-icon bg-info"><i class="fa fa-usd"></i></div></div>
+                                            <div class="feat_small_details">
+                                                <h4>Saldo</h4>
+                                                <p id="saldo"> </p>
+                                                <p id="total-investido">Total de Investimento: </p>
+
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div class="feat_small_icon">
+                                                <div class="sumary-icon bg-warning"><i class="fa fa-sitemap"></i></div>
+                                            </div>
+                                            <div class="feat_small_details">
+                                                <h4>Binário Ativo</h4>
+                                                <p id="binario-ativo"></p>
+
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div class="feat_small_icon">
+                                                <div class="sumary-icon bg-warning">
+                                                    <i class="fa fa-check"></i>
+                                                </div>
+                                            </div>
+                                            <div class="feat_small_details">
+                                                <h4>Situação</h4>
+                                                <p id="situacao"></p>
+
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="login-screen modal-in ">
+            <!--  <div class="login-screen  ">-->
+            <div class="view">
+                <div class="page ">
+                    <div class="page-content login-screen-content login">
+                        <div class="login-screen-title ">
+                            <div class="logo-titulo">
+                                <img src="images/logo_hoseki.png" alt="" title="" />
+                            </div>
+                            <br>
+                            <span class="subtitle">A solução para seu negócio</span>
+                        </div>
+
+                        <div class="loginform">
+                            <form id="form1" method="post">
+
+                                <fieldset data-role="fieldcontainer">
+                                    <ul>
+                                        <li class="user-icon"><label for="login">Login</label></li>
+                                    </ul>
+                                    <input id="login" name="login" type="text" value="" class="form_input required" /></li>
+
+                                </fieldset>
+                                <fieldset data-role="fieldcontainer">
+                                    <ul>
+                                        <li class="lock-icon"><label for="senha">Senha</label></li>
+                                    </ul>
+                                    <input id="senha" name="senha" type="password" class="form_input required" />
+                                </fieldset>
+                                <input type="submit" name="submit" class="form_submit " id="logar" value="Login" />
+                                <div class="hidden" id="loader"> <img src="css/img/loading.gif" /></div>
+                            </form>
+
+                        </div>
+
+
+                        <!--
+                                                <div class="list-block">
+                                                    <ul>
+                                                        <li><a href="#" class=" item-link list-button">Log In</a></li>
+                                                    </ul>
+                                                    <div class="list-block-label">
+                                                        <p><a href="#" class="close-login-screen">Click here to close Login Screen</a></p>
+                                                    </div>
+                                                </div>
+                        -->
+                    </div>
+                </div>
+                <div class="toolbar">
+                    <div class="toolbar-inner">
+                        <ul class="toolbar_icons icons_4row logo-fundo">
+                            <li><img src="images/icons/white/user.png" alt="" title="" /></li>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script></script>
+    <script>
+        // Here you can initialize the app
+
+    </script>
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+
+    <script src="js/jquery.validate.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+
+    <script type="text/javascript" src="js/jquery.swipebox.js"></script>
+    <script type="text/javascript" src="js/jquery.fitvids.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/enc-base64.js"></script>
+    <script src="js/hmac.js"></script>
+    <script src="js/sha256.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="cordova.js"></script>
+    <script src="js/angular.min.js"> </script>
+
+    <script type="text/javascript" src="js/my-app.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+
+        
+        function getBase64Encode(rawStr) {
+            var wordArray = CryptoJS.enc.Utf8.parse(JSON.stringify(rawStr));
+            var result = CryptoJS.enc.Base64.stringify(wordArray);
+            return result;
+        };
+
+        function getBase64Decode(rawStr) {
+            var wordArray = CryptoJS.enc.Base64.parse(rawStr);
+            var result = wordArray.toString(CryptoJS.enc.Utf8);
+            return result
+        };
+        function alertDismissed() {
+
+        }
+        function alertSucesso() {
+
+            renderPaginaInicial();
+            myApp.closeModal('.login-screen');
+
+        }
+
+
+
+
+        $('#form1').validate({
+            rules: {
+
+                login: { required: true, minlength: 3 },
+                senha: { required: true, minlength: 3 }
+
+            },
+            messages: {
+                login: { required: 'Informe seu login', minlength: 'No mínimo 3 caracteres' },
+                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent());
+            },
+            submitHandler: function (form) {
+
+                myApp.showPreloader();
+                $('#logar').hide();
+               
+
+                var login_field_value = $("#login").val();
+                var senha_field_value = $("#senha").val();
+
+
+
+                var storage = window.localStorage;
+                if (storage.length >= 1) {
+                    var dados = {
+                        "login": login_field_value,
+                        "senha": senha_field_value
+                    };
+                    var dados1 = getBase64Encode(dados);
+                    var jwt = storage.getItem('token');
+                    var JSONdata = {
+                        "dados": dados1,
+                        "jwt": jwt
+                    };
+                    var URL = 'http://' + ip + '/LoginApp/LoginDispositivo';
+                } else {
+                    var header = {
+                        "alg": "HS256",
+                        "typ": "JWT"
+                    };
+                    var payload = {
+                        "login": login_field_value,
+                        "senha": senha_field_value,
+                        "uuid": 'uuid' + device.uuid,
+                        "model": device.model,
+                        "platform": device.platform
+                    };
+                    var headerBase64 = getBase64Encode(header);
+                    var payloadBase64 = getBase64Encode(payload);
+                    var signature = CryptoJS.HmacSHA256(headerBase64 + "." + payloadBase64, senha_field_value)
+                    var signatureBase64 = CryptoJS.enc.Base64.stringify(signature);
+                    var jwt = headerBase64 + "." + payloadBase64 + "." + signatureBase64;
+
+                    var JSONdata = {
+                        "jwt": jwt
+                    };
+
+
+                    var URL = 'http://' + ip + '/LoginApp/LoginCadastroDispositivo';
+
+                }
+
+                $.ajax({
+                   
+                    type: "post",
+                    url: URL,
+                    data: { 'dados': JSONdata },
+                    dataType: "json",
+                    success: function (resultado) {
+
+
+
+                        if (resultado["retorno"] == "Login realizado com sucesso") {
+                            myApp.hidePreloader();
+                            var storage = window.localStorage;
+                            $('#loader').removeClass('loader');
+                            $('#loader').addClass('hidden');
+                            var token = JSONdata['jwt'];
+                            storage.setItem('token', token);
+                            user = resultado['dados'];
+                            navigator.notification.alert(
+                                'Login realizado com sucesso',  // message
+                                alertSucesso,         // callback
+                                'Login',            // title
+                                'ok'                  // buttonName
+                            );
+
+
+
+                        }
+                        else {
+                            $('#logar').show();
+                            resp = resultado["retorno"];
+                            myApp.hidePreloader();
+                            navigator.notification.alert(
+                                resp,  // message
+                                alertDismissed,         // callback
+                                'Login',            // title
+                                'ok'                  // buttonName
+                            );
+                        };
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        $('#logar').fadeIn();
+                        navigator.notification.alert(
+                            'Erro de conexão',  // message
+                            alertDismissed,         // callback
+                            'login',            // title
+                            'ok'                  // buttonName
+                        );
+                        $('#logar').show();
+                        myApp.hidePreloader();
+                    }
+
+                });
+
+
+                return false;
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+</body>
+</html>

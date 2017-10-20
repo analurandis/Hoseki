@@ -1,0 +1,71 @@
+﻿
+
+
+
+<div class="pages">
+    <div data-page="sistema" class="page no-toolbar no-navbar">
+        <div class="page-content">
+
+            <div class="navbarpages">
+                
+                <div class="navbar_page_center">Fatura</div>
+                
+            </div>
+
+            <div id="pages_maincontent">
+
+                <h2 class="page_subtitle">Pagamento</h2>
+                <div class="CreditoSistema">
+                    <div class="erro " >
+                        <p id="form_erro" class="hidden" >Erro</p>
+                    </div>
+                    <form id="formSistema" method="post">
+
+                        <div class="commentform">
+                            
+                            <label for="carteira">Carteira</label>
+                            <select name="select-carteira" id="select-carteira">
+                                                               
+                            </select>
+
+                            <label for="descricao">Descrição</label>
+
+                            <input disabled id="descricao" name="descricao" type="text" value="" class="form_input required" />
+
+                            <label for="valor">Valor</label>
+
+                            <input disabled id="valor" name="Valor" type="text" value="" class="form_input required" />
+
+                            <label for="login">Login</label>
+
+                            <input disabled id="login" name="login" type="text" value="" class="form_input required" />
+
+                            <label for="senha">Senha Secundária</label>
+
+                            <input id="senha" name="senha" type="password" value="" class="form_input required" />
+
+                            <div class="row">
+                                <div class="col-50">
+                                    <input type="submit" name="submit" class="button button-big button_ok " id="avancar" value="Avançar" />
+                                </div>
+                                <div class="col-50">
+                                    <a href="fatura.html" class="button button_voltar button-big" onclick="renderFatura()"><i class="fa fa-exchange icon-pg "></i>  Voltar</a>
+                                </div>
+                            </div>
+
+                                </div>
+</form>
+
+                </div>
+
+                
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+<script>
+
+</script>
