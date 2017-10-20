@@ -18,8 +18,8 @@ var myApp = new Framework7({
     // Enable templates auto precompilation
     precompileTemplates: true,
     // Enabled pages rendering using Template7
-	swipeBackPage: true,
-	pushState: true,
+    swipeBackPage: true,
+    pushState: true,
     template7Pages: true
 });
 
@@ -30,71 +30,148 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
     // Enable dynamic Navbar
     dynamicNavbar: false,
-    
-   
-});
-$$(document).on('page:init', function (e) {
-    // Do something here when page loaded and initialized
 
-})
+
+});
+
+
 
 $$(document).on('pageInit', function (e) {
-    var page = e.detail.page;
-    //CREDITO SISTEMA
-    if (page.name === 'sistema') {
-        $('#formSistema').validate({
 
-            rules: {
-                senha: { required: true, minlength: 3 }
-            },
-            messages: {
-                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' }
-            },
-            errorPlacement: function (error, element) {
-                error.insertBefore(element);
-            },
-            submitHandler: function (form) {
 
-                var carteira = $("#select-carteira").val();
-                var senha = $("#senha").val();
-                renderPagamentoCreditoSistemaAvancar(senha, carteira);
-                return false;
+    $(".swipebox").swipebox();
+    $(".videocontainer").fitVids();
+
+
+
+
+    $(".posts li").hide();
+    size_li = $(".posts li").size();
+    x = 3;
+    $('.posts li:lt(' + x + ')').show();
+    $('#loadMore').click(function () {
+        x = (x + 1 <= size_li) ? x + 1 : size_li;
+        $('.posts li:lt(' + x + ')').show();
+        if (x == size_li) {
+            $('#loadMore').hide();
+            $('#showLess').show();
+        }
+    });
+
+
+
+    $("a.switcher").bind("click", function (e) {
+        e.preventDefault();
+
+        var theid = $(this).attr("id");
+        var theproducts = $("ul#photoslist");
+        var classNames = $(this).attr('class').split(' ');
+
+
+        if ($(this).hasClass("active")) {
+            // if currently clicked button has the active class
+            // then we do nothing!
+            return false;
+        } else {
+            // otherwise we are clicking on the inactive button
+            // and in the process of switching views!
+
+            if (theid == "view13") {
+                $(this).addClass("active");
+                $("#view11").removeClass("active");
+                $("#view11").children("img").attr("src", "images/switch_11.png");
+
+                $("#view12").removeClass("active");
+                $("#view12").children("img").attr("src", "images/switch_12.png");
+
+                var theimg = $(this).children("img");
+                theimg.attr("src", "images/switch_13_active.png");
+
+                // remove the list class and change to grid
+                theproducts.removeClass("photo_gallery_11");
+                theproducts.removeClass("photo_gallery_12");
+                theproducts.addClass("photo_gallery_13");
+
             }
-        });
-    }
-    //INDEX
-  //  if (page.name === 'index') {
-        $('#pagina_inicial').on('click', function () {
-            renderPaginaInicial();
-        });
-        $('#pagina_investimento').on('click', function () {
-            renderPaginaInicial();
-        });
-        $('#pagina_upgrade').on('click', function () {
-            renderPaginaInicial();
-        });
-        $('#pagina_rede').on('click', function () {
-            renderFatura();
-           
-        });
-        $('#pagina_fatura').on('click', function () {
-            renderFatura();
-        });
-        $('#pagina_financeiro').on('click', function () {
-            renderPaginaInicial();
-        });
-        $('#pagina_dados').on('click', function () {
-            renderPaginaInicial();
-        });
-        $('#pagina_sair').on('click', function () {
-            fecharApp();
-        });
-      
-});
 
-$$(document).on('page:init', '.page[data-page="about"]', function (e) {
-    // Do something here when page with data-page="about" attribute loaded and initialized
-}) 
+            else if (theid == "view12") {
+                $(this).addClass("active");
+                $("#view11").removeClass("active");
+                $("#view11").children("img").attr("src", "images/switch_11.png");
+
+                $("#view13").removeClass("active");
+                $("#view13").children("img").attr("src", "images/switch_13.png");
+
+                var theimg = $(this).children("img");
+                theimg.attr("src", "images/switch_12_active.png");
+
+                // remove the list class and change to grid
+                theproducts.removeClass("photo_gallery_11");
+                theproducts.removeClass("photo_gallery_13");
+                theproducts.addClass("photo_gallery_12");
+
+            }
+            else if (theid == "view11") {
+                $("#view12").removeClass("active");
+                $("#view12").children("img").attr("src", "images/switch_12.png");
+
+                $("#view13").removeClass("active");
+                $("#view13").children("img").attr("src", "images/switch_13.png");
+
+                var theimg = $(this).children("img");
+                theimg.attr("src", "images/switch_11_active.png");
+
+                // remove the list class and change to grid
+                theproducts.removeClass("photo_gallery_12");
+                theproducts.removeClass("photo_gallery_13");
+                theproducts.addClass("photo_gallery_11");
+
+            }
+
+        }
+
+    });
+
+    document.addEventListener('touchmove', function (event) {
+        if (event.target.parentNode.className.indexOf('navbarpages') != -1 || event.target.className.indexOf('navbarpages') != -1) {
+            event.preventDefault();
+        }
+    }, false);
+
+    // Add ScrollFix
+    var scrollingContent = document.getElementById("pages_maincontent");
+    new ScrollFix(scrollingContent);
+
+
+    var ScrollFix = function (elem) {
+        // Variables to track inputs
+        var startY = startTopScroll = deltaY = undefined,
+
+            elem = elem || elem.querySelector(elem);
+
+        // If there is no element, then do nothing	
+        if (!elem)
+            return;
+
+        // Handle the start of interactions
+        elem.addEventListener('touchstart', function (event) {
+            startY = event.touches[0].pageY;
+            startTopScroll = elem.scrollTop;
+
+            if (startTopScroll <= 0)
+                elem.scrollTop = 1;
+
+            if (startTopScroll + elem.offsetHeight >= elem.scrollHeight)
+                elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+        }, false);
+    };
+
+
+
+})
+function alerta() {
+
+}
 function fecharApp() {
     if (navigator.app) {
         navigator.app.exitApp();
@@ -118,47 +195,47 @@ function renderPaginaInicial() {
 
     var pes = user['NomePessoa'];
     $('.dados-usuario p').html(pes);
-        id = user['IDContrato']
-        var JSONdata = {
-            "id": id
-        };
-        $.ajax({
-            type: "post",
-         
-            url:'http://' + ip + '/Inicial/Dashboard',
-            data: { 'id': JSONdata },
-            dataType: "json",
-            success: function (resultado) {
-                
-                var plano = user['Plano'];
-                
-                $('#plano-atual').html(plano);
-                $('#saldo').html(resultado['Saldo']);
-                $('#binario-ativo').html(resultado['model']['DadosRede']['QualificadoBinario']);
-                if (resultado['model']['DadosRede']['QualificadoBinario'] == "Sim") {
-                    $('#binario-ativo').css({ "background": "#47a447", "color": "white", "border-color": "#47a447" });
-                } else {
-                    $('#binario-ativo').css({ "background": "#d2322d", "color": "white", "border-color": "#d2322d"  });
-                }
-                var totalInv = numeroParaMoeda(resultado['model']['DadosPessoa']['ValorTotalInvestido'],2,',','.');
-                $('#total-investido').html("Total Investido: " + totalInv  );
-                $('#situacao').html(resultado['model']['DadosRede']['Situacao']);
-               
-                if (resultado['model']['DadosRede']['Situacao'] == "Ativo") {
-                    $('#situacao').css({ "background":"#47a447","color":"white", "border-color":"#47a447"} );
-                } else {
-                    $('#situacao').css({ "background": "#d2322d", "color": "white", "border-color": "#d2322d"} );
-                }
-                
-              
-               
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                myApp.alert('Tela Inicial', 'Erro de Conexão')
-                
+    id = user['IDContrato']
+    var JSONdata = {
+        "id": id
+    };
+    $.ajax({
+        type: "post",
+
+        url: 'http://' + ip + '/Inicial/Dashboard',
+        data: { 'id': JSONdata },
+        dataType: "json",
+        success: function (resultado) {
+
+            var plano = user['Plano'];
+
+            $('#plano-atual').html(plano);
+            $('#saldo').html(resultado['Saldo']);
+            $('#binario-ativo').html(resultado['model']['DadosRede']['QualificadoBinario']);
+            if (resultado['model']['DadosRede']['QualificadoBinario'] == "Sim") {
+                $('#binario-ativo').css({ "background": "#47a447", "color": "white", "border-color": "#47a447" });
+            } else {
+                $('#binario-ativo').css({ "background": "#d2322d", "color": "white", "border-color": "#d2322d" });
+            }
+            var totalInv = numeroParaMoeda(resultado['model']['DadosPessoa']['ValorTotalInvestido'], 2, ',', '.');
+            $('#total-investido').html("Total Investido: " + totalInv);
+            $('#situacao').html(resultado['model']['DadosRede']['Situacao']);
+
+            if (resultado['model']['DadosRede']['Situacao'] == "Ativo") {
+                $('#situacao').css({ "background": "#47a447", "color": "white", "border-color": "#47a447" });
+            } else {
+                $('#situacao').css({ "background": "#d2322d", "color": "white", "border-color": "#d2322d" });
             }
 
-        });
+
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.alert('Tela Inicial', 'Erro de Conexão')
+
+        }
+
+    });
 };
 
 
@@ -182,25 +259,25 @@ function renderFatura() {
                     + '<div> <div class="faturatitulo grupo"> Data Pagamento: </div>  <div class="esquerda">' + value.DtPagamento + '</div></div>'
                     + '<div> <div class="faturatitulo grupo">Valor: </div>  <div class="esquerda">' + value.Valor + '</div></div>'
                     + '<div> <div class="faturatitulo grupo">Situação: </div> <div class="esquerda">' + value.Situacao + '</div></div>'
-                    + '</div>'; 
+                    + '</div>';
                 if (value.Situacao == 'Pendente') {
                     $('#faturas ul').append(li + '<a href="pgFatura.html" onclick="renderTipoPagamento(' + value.IDFatura + ',' + value.Valor + ');" class="button_small " id="btn_pagar" ><i class="fa-icon fa fa-credit-card "></i>Pagar</a> </div>');
                     $('.features_list_detailed li ').css({ "background-color": "rgba(248, 109, 0, 0.3)" });
-                   
-                 
+
+
                 }
                 else {
                     $('#faturas ul').append(li + '</li>');
                 }
-              
+
             });
-         
+
             myApp.hidePreloader();
-            
+
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             myApp.alert('Erro de Conexão', 'Tela Inicial');
-          
+
             myApp.hidePreloader();
             renderPaginaInicial();
         }
@@ -217,20 +294,20 @@ function renderTipoPagamento(ID, Valor) {
         data: { 'ID': ID },
         dataType: "json",
         success: function (resultado) {
-          
+
             var cartao = resultado['Cartao'];
-           
-            if (cartao ==false) {
+
+            if (cartao == false) {
                 $('#tipopagamento').addClass('hidden');
             }
             guid = resultado['cookie'];
-         
-         
-          
+
+
+
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             myApp.alert('Erro de Conexão', 'Tela Pagamento');
-           
+
         }
 
     });
@@ -248,10 +325,10 @@ function renderPagamentoCredito(ID) {
         success: function (resultado) {
             myApp.hidePreloader();
             model = resultado['model'];
-           
+
             var valor = resultado['model']['Valor'];
-           
-            var val = numeroParaMoeda(valor,2,',','.');
+
+            var val = numeroParaMoeda(valor, 2, ',', '.');
             $('#descricao').val(resultado['model']['Descricao']);
             $('#valor').val(val);
             $('#login').val(resultado['model']['Login']);
@@ -263,54 +340,78 @@ function renderPagamentoCredito(ID) {
 
 
             myApp.hidePreloader();
-            
+
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             myApp.hidePreloader();
             myApp.alert('Erro de Conexão', 'Tela Pagamento');
-            
+
 
         }
 
     });
 };
 
+$$(document).on('pageInit', function (e) {
+    var page = e.detail.page;
+    if (page.name === 'sistema') {
+        $('#formSistema').validate({
+
+            rules: {
+                senha: { required: true, minlength: 3 }
+            },
+            messages: {
+                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' }
+            },
+            errorPlacement: function (error, element) {
+                error.insertBefore(element);
+            },
+            submitHandler: function (form) {
+
+                var carteira = $("#select-carteira").val();
+                var senha = $("#senha").val();
+                renderPagamentoCreditoSistemaAvancar(senha, carteira);
+                return false;
+            }
+        });
+    }
+});
 
 
-
-function renderPagamentoCreditoSistemaAvancar(senha,carteira) {
+function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
 
     model['IDCarteira'] = carteira;
     model['Senha'] = senha;
     myApp.showPreloader();
     var JSONdata = {
-        
+
         "user": user['IDContrato']
     };
     $.ajax({
-        type: "post", 
+        type: "post",
         url: 'http://' + ip + '/Financeiro/FaturePayAvancar',
         data: {
             'dados': JSONdata,
-            'model2': model},
+            'model2': model
+        },
         dataType: "json",
         success: function (resultado) {
             myApp.hidePreloader();
-   
-            if (resultado["retorno"]!=null) {
+
+            if (resultado["retorno"] != null) {
                 $('#form_erro').removeClass('hidden');
                 $('#form_erro').html(resultado['retorno']);
 
-                
+
             }
-          
+
 
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             myApp.hidePreloader();
-            myApp.alert('Erro de Conexão','Tela de Pagamento');
-           
+            myApp.alert('Erro de Conexão', 'Tela de Pagamento');
+
 
         }
 

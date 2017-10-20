@@ -490,7 +490,7 @@ width:14%; margin:0 3%;
 
 .login {
     /*  background: url(images/bg.jpg) no-repeat center center;*/
-    background-color: #0c4545;
+    background-color: #397070;
     background-attachment: fixed;
     -webkit-background-size: 100%;
     -moz-background-size: 100%;
@@ -1295,10 +1295,10 @@ top: 50px;
     display: inline-block;
 }
 .logo-titulo {
-    background-color: rgba(255,255,255,0.3);
+    /*background-color: rgba(255,255,255,0.3);
     border-top: solid;
     border-width: 10px;
-    border-color: rgba(255,255,255,0);
+    border-color: rgba(255,255,255,0);*/
 }
 .loader {
     position: absolute;
