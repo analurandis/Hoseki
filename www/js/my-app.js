@@ -38,9 +38,63 @@ $$(document).on('page:init', function (e) {
 
 })
 
-function alerta() {
+$$(document).on('pageInit', function (e) {
+    var page = e.detail.page;
+    //CREDITO SISTEMA
+    if (page.name === 'sistema') {
+        $('#formSistema').validate({
 
-}
+            rules: {
+                senha: { required: true, minlength: 3 }
+            },
+            messages: {
+                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' }
+            },
+            errorPlacement: function (error, element) {
+                error.insertBefore(element);
+            },
+            submitHandler: function (form) {
+
+                var carteira = $("#select-carteira").val();
+                var senha = $("#senha").val();
+                renderPagamentoCreditoSistemaAvancar(senha, carteira);
+                return false;
+            }
+        });
+    }
+    //INDEX
+  //  if (page.name === 'index') {
+        $('#pagina_inicial').on('click', function () {
+            renderPaginaInicial();
+        });
+        $('#pagina_investimento').on('click', function () {
+            renderPaginaInicial();
+        });
+        $('#pagina_upgrade').on('click', function () {
+            renderPaginaInicial();
+        });
+        $('#pagina_rede').on('click', function () {
+            renderFatura();
+           
+        });
+        $('#pagina_fatura').on('click', function () {
+            renderFatura();
+        });
+        $('#pagina_financeiro').on('click', function () {
+            renderPaginaInicial();
+        });
+        $('#pagina_dados').on('click', function () {
+            renderPaginaInicial();
+        });
+        $('#pagina_sair').on('click', function () {
+            fecharApp();
+        });
+      
+});
+
+$$(document).on('page:init', '.page[data-page="about"]', function (e) {
+    // Do something here when page with data-page="about" attribute loaded and initialized
+}) 
 function fecharApp() {
     if (navigator.app) {
         navigator.app.exitApp();
@@ -221,30 +275,7 @@ function renderPagamentoCredito(ID) {
     });
 };
 
-$$(document).on('pageInit', function (e) {
-    var page = e.detail.page;
-    if (page.name === 'sistema') {
-        $('#formSistema').validate({
 
-            rules: {
-                senha: { required: true, minlength: 3 }
-            },
-            messages: {
-                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' }
-            },
-            errorPlacement: function (error, element) {
-                error.insertBefore(element);
-            },
-            submitHandler: function (form) {
-              
-                var carteira = $("#select-carteira").val();
-                var senha = $("#senha").val();
-                renderPagamentoCreditoSistemaAvancar(senha,carteira);
-                return false;
-            }
-        });
-    }
-});
 
 
 function renderPagamentoCreditoSistemaAvancar(senha,carteira) {
