@@ -651,6 +651,7 @@ clear:both;
         background-color: rgba(144,238,144,0.5);
         border-radius: 5px;
     }
+
 ul.features_list_detailed li .feat_small_icon{
 width:30%;
 
@@ -1373,4 +1374,8 @@ div[class*="col-"] {
     width: 100%;
     margin: 0 0 5px 0;
     background-color: rgba(255,0,0,0.2);
+}
+#Pendente {
+    background-color: rgba(248, 109, 0, 0.3);
+   
 }

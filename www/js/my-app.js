@@ -61,6 +61,7 @@ $$(document).on('pageInit', function (e) {
 
 
     $("a.switcher").bind("click", function (e) {
+        $('#voltar_fatura').trigger('click');
         e.preventDefault();
 
         var theid = $(this).attr("id");
@@ -174,11 +175,17 @@ function alerta() {
 }
 function fecharApp() {
     if (navigator.app) {
+        myApp.openModal('.login-screen');
         navigator.app.exitApp();
+      
     } else if (navigator.device) {
+        myApp.openModal('.login-screen');
         navigator.device.exitApp();
+      
     } else {
+        myApp.openModal('.login-screen');
         window.close();
+       
     }
 }
 /*Detalhe dos parametros
@@ -238,7 +245,9 @@ function renderPaginaInicial() {
     });
 };
 
-
+$$('.open-login').on('click', function () {
+    myApp.loginScreen();
+});
 function renderFatura() {
     myApp.showPreloader();
     var IDContrato = user['IDContrato'];
@@ -252,7 +261,7 @@ function renderFatura() {
             $('#faturas ul').empty();
             var obj = (resultado['query']);
             $.each(obj, function (key, value) {
-                var li = '<li> '
+                var li = '<li id=' + value.Situacao + '> '
                     + '<div> <div class="faturatitulo grupo"> Código:  </div> <div class="esquerda" id="IDFatura">' + value.IDFatura + '</div> </div > '
                     + '<div> <div class="faturatitulo grupo"> Descrição:  </div> <div class="esquerda">' + value.Descricao + '</div> </div > '
                     + '<div> <div class="faturatitulo grupo"> Data:  </div>  <div class=" esquerda">' + value.Data + '</div></div>'
@@ -260,15 +269,18 @@ function renderFatura() {
                     + '<div> <div class="faturatitulo grupo">Valor: </div>  <div class="esquerda">' + value.Valor + '</div></div>'
                     + '<div> <div class="faturatitulo grupo">Situação: </div> <div class="esquerda">' + value.Situacao + '</div></div>'
                     + '</div>';
-                if (value.Situacao == 'Pendente') {
+                if (value.IDSituacao == 1) {
+                  
                     $('#faturas ul').append(li + '<a href="pgFatura.html" onclick="renderTipoPagamento(' + value.IDFatura + ',' + value.Valor + ');" class="button_small " id="btn_pagar" ><i class="fa-icon fa fa-credit-card "></i>Pagar</a> </div>');
-                    $('.features_list_detailed li ').css({ "background-color": "rgba(248, 109, 0, 0.3)" });
-
-
-                }
+                  
+                } 
+                
                 else {
+                   
                     $('#faturas ul').append(li + '</li>');
-                }
+                       
+                    }
+          
 
             });
 
@@ -314,9 +326,7 @@ function renderTipoPagamento(ID, Valor) {
 };
 var model;
 function renderPagamentoCredito(ID) {
-
     myApp.showPreloader();
-
     $.ajax({
         type: "post",
         url: 'http://' + ip + '/Financeiro/FaturePay',
@@ -337,8 +347,7 @@ function renderPagamentoCredito(ID) {
                 $('#select-carteira').append('<option value="' + value.Value + '">' + value.Text + '</option>');
 
             });
-
-
+            
             myApp.hidePreloader();
 
         },
@@ -354,6 +363,7 @@ function renderPagamentoCredito(ID) {
 
 $$(document).on('pageInit', function (e) {
     var page = e.detail.page;
+    
     if (page.name === 'sistema') {
         $('#formSistema').validate({
 
@@ -396,19 +406,34 @@ function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
         },
         dataType: "json",
         success: function (resultado) {
-            myApp.hidePreloader();
+           
+            $('#voltar_fatura').trigger('click');
+            $('#voltar_fatura').click(function () {
+                renderFatura();
+            });
 
+            myApp.hidePreloader();
+            if (resultado["retorno"] == "sucesso") {
+                myApp.alert("Pagamento Realizado", 'Pagamento', function () {
+                    $('voltar_fatura').trigger('click');
+                    renderfaturapos();
+                    mainView.goBack();
+                    mainView.router.load('fatura.html');
+                    renderFatura();
+
+                });
+            }
             if (resultado["retorno"] != null) {
                 $('#form_erro').removeClass('hidden');
                 $('#form_erro').html(resultado['retorno']);
 
 
             }
-
-
+          
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
+           
             myApp.hidePreloader();
             myApp.alert('Erro de Conexão', 'Tela de Pagamento');
 
@@ -418,6 +443,16 @@ function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
     });
 };
 
+function renderfaturapos(){
+    myApp.onPageInit('sistema', function (page) {
+
+        myApp.alert('pagamento ok', function () {
+            mainView.goBack();
+            renderFatura();
+        });
+    });
+    
+};
 /*
 function renderPagamentoBoleto() {
     myApp.showPreloader();

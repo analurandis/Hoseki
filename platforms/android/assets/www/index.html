@@ -31,12 +31,18 @@
 
             <ul>
                 <li class="home-icon"><a href="index.html" onclick="renderPaginaInicial()" class="close-panel">Pagina Inicial</a></li>
-                <li class="contact-icon"><a href="about.html" class="close-panel">Rede</a></li>
-                <li class="contact-icon"><a href="fatura.html" onclick="renderFatura()" class="close-panel">Fatura</a></li>
-                <li class="blog-icon"><a href="#" class="close-panel">Financeiro</a></li>
-                <li class="video-icon"><a href="#" class="close-panel">Meus Dados</a></li>
-                <li class="logout-icon"><a href="#" onclick="fecharApp()" class="close-panel">Sair</a></li>
+                <li class="investimento-icon"><a href="index.html" id="pagina_investimento" onclick="" class="close-panel">Investimentos</a></li>
+                <li class="upgrade-icon"><a href="index.html" id="pagina_upgrade" class="close-panel">Upgrade</a></li>
+                <li class="rede-icon"><a href="about.html" id="pagina_rede" class="close-panel">Rede</a></li>
+                <li class="money-icon"><a href="fatura.html" id="pagina_fatura" onclick="renderFatura()" class="close-panel">Fatura</a></li>
+                <li class="dolar-icon"><a href="#" id="pagina_financeiro" class="close-panel">Financeiro</a></li>
+                <li class="dados-icon"><a href="#" id="pagina_dados" class="close-panel">Meus Dados</a></li>
+                <li class="exit-icon"><a href="index.html"  onclick="fecharApp()"  id="pagina_sair" class="close-panel">Sair</a></li>
+
             </ul>
+
+
+            
             <img class="menu-logo" src="images/logo_hoseki.png" />
         </nav>
     </div>
@@ -126,7 +132,7 @@
         </div>
 
         <div class="login-screen modal-in ">
-            <!--   <div class="login-screen  ">-->
+           <!--   <div class="login-screen  ">-->
             <div class="view">
                 <div class="page ">
                     <div class="page-content login-screen-content login">
@@ -135,7 +141,7 @@
                                 <img src="images/logo_hoseki.png" alt="" title="" />
                             </div>
                             <br>
-                            <span class="subtitle">A solução para seu negócio</span>
+                            
                         </div>
 
                         <div class="loginform">
@@ -173,16 +179,16 @@
                         -->
                     </div>
                 </div>
-                <!-- <div class="toolbar">
-                     <div class="toolbar-inner">
-                         <ul class="toolbar_icons icons_4row logo-fundo">
-                             <li><img src="images/icons/white/user.png" alt="" title="" /></li>
+               <!-- <div class="toolbar">
+                    <div class="toolbar-inner">
+                        <ul class="toolbar_icons icons_4row logo-fundo">
+                            <li><img src="images/icons/white/user.png" alt="" title="" /></li>
 
 
-                         </ul>
-                     </div>
-                 </div>
-                 -->
+                        </ul>
+                    </div>
+                </div>
+                -->
             </div>
 
         </div>
@@ -207,7 +213,7 @@
     <script src="js/jquery.validate.min.js"></script>
     <script src="cordova.js"></script>
     <script src="js/angular.min.js"> </script>
-
+   
     <script type="text/javascript" src="js/my-app.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
     <script src="js/index.js"></script>
@@ -215,7 +221,7 @@
 
     <script>
 
-
+        
         function getBase64Encode(rawStr) {
             var wordArray = CryptoJS.enc.Utf8.parse(JSON.stringify(rawStr));
             var result = CryptoJS.enc.Base64.stringify(wordArray);
@@ -258,7 +264,7 @@
 
                 myApp.showPreloader();
                 $('#logar').hide();
-
+               
 
                 var login_field_value = $("#login").val();
                 var senha_field_value = $("#senha").val();
@@ -306,7 +312,7 @@
                 }
 
                 $.ajax({
-
+                   
                     type: "post",
                     url: URL,
                     data: { 'dados': JSONdata },
@@ -323,13 +329,18 @@
                             var token = JSONdata['jwt'];
                             storage.setItem('token', token);
                             user = resultado['dados'];
-                            navigator.notification.alert(
+                            myApp.alert('Login realizado com sucesso', 'Login', function () {
+                                renderPaginaInicial();
+                                myApp.closeModal('.login-screen');
+
+                            });
+                          /*  navigator.notification.alert(
                                 'Login realizado com sucesso',  // message
                                 alertSucesso,         // callback
                                 'Login',            // title
                                 'ok'                  // buttonName
                             );
-
+                            */
 
 
                         }
@@ -337,22 +348,13 @@
                             $('#logar').show();
                             resp = resultado["retorno"];
                             myApp.hidePreloader();
-                            navigator.notification.alert(
-                                resp,  // message
-                                alertDismissed,         // callback
-                                'Login',            // title
-                                'ok'                  // buttonName
-                            );
+                            myApp.alert(resp, 'Login');
+                           
                         };
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         $('#logar').fadeIn();
-                        navigator.notification.alert(
-                            'Erro de conexão',  // message
-                            alertDismissed,         // callback
-                            'login',            // title
-                            'ok'                  // buttonName
-                        );
+                        myApp.alert('Erro de conexão', 'Login');
                         $('#logar').show();
                         myApp.hidePreloader();
                     }
