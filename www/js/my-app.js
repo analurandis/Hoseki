@@ -414,11 +414,9 @@ function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
 
             myApp.hidePreloader();
             if (resultado["retorno"] == "sucesso") {
+                mainView.router.loadPage('fatura.html');
                 myApp.alert("Pagamento Realizado", 'Pagamento', function () {
-                    $('voltar_fatura').trigger('click');
-                    renderfaturapos();
-                    mainView.goBack();
-                    mainView.router.load('fatura.html');
+                    
                     renderFatura();
 
                 });
@@ -443,66 +441,6 @@ function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
     });
 };
 
-function renderfaturapos(){
-    myApp.onPageInit('sistema', function (page) {
-
-        myApp.alert('pagamento ok', function () {
-            mainView.goBack();
-            renderFatura();
-        });
-    });
-    
-};
-/*
-function renderPagamentoBoleto() {
-    myApp.showPreloader();
-    $.ajax({
-        type: "post",
-        url: 'http://' + ip + '/Financeiro/FaturePayAvancar',
-        data: { 'dados': guid },
-        dataType: "json",
-        success: function (resultado) {
-            myApp.hidePreloader();
-
-            var boleto = resultado['boleto'];
-            var file = resultado['file'];
-            var codigo = resultado['codigo'];
-
-            var specialElementHandlers = {
-                '#bypassme': function (element, renderer) {
-                    return true;
-                }
-            };
-            var doc = new jsPDF();
-            doc.fromHTML(
-                boleto, // HTML string or DOM elem ref.
-                0.5, // x coord
-                0.5, // y coord
-                {
-                    'width': 7.5, // max width of content on PDF
-                    'elementHandlers': specialElementHandlers
-                });
-
-            doc.output();
-            doc.save('pdf.pdf');
-
-
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            myApp.hidePreloader();
-            navigator.notification.alert(
-                'Erro de Conexão',  // message
-                alerta,         // callback
-                'Tela Pagamento',            // title
-                'ok'                  // buttonName
-            );
-
-        }
-
-    });
-};
-
-*/
 
 function getBase64Encode(rawStr) {
     var wordArray = CryptoJS.enc.Utf8.parse(JSON.stringify(rawStr));
@@ -525,3 +463,123 @@ function alertSucesso() {
 
 }
 
+function renderInvestimentos() {
+    myApp.showPreloader();
+    $.ajax({
+        type: "post",
+        url: 'http://' + ip + '/Compras/BuyOdds',
+        success: function (resultado) {
+          
+            $('#investimentos ul').empty();
+            var obj = (resultado);
+            $.each(obj, function (key, value) {
+                var valor = numeroParaMoeda(value.Valor,2,',','.');
+                var li = '<li><div class="row">'
+                    +'<div class="col-50" > '
+                        + ' <img src="' + value.Imagem + '" />'
+                    + '</div >'
+                        + '<div class="col-50">'
+                        + '<p>' + value.Titulo + '</p >'
+                    + '<p>' + valor + '</p >'
+                    + '<p> <a href="#" onclick="renderComprarInvestimento(' + value.ID + ');" class="button-fill button " id="btn_comprar" ><i class="fa-icon fa fa-arrow-up"></i>Comprar</a> </p >'
+                    +' </div>'
+                    +'</div></li>'              
+                    $('#investimentos ul').append(li);
+            });
+
+            myApp.hidePreloader();
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.alert('Erro de Conexão', 'Tela Inicial');
+
+            myApp.hidePreloader();
+            renderPaginaInicial();
+        }
+
+    });
+};
+function renderComprarInvestimento(id) {
+    myApp.showPreloader();
+    var JSONdata = {
+        "id" : id,
+        "userID": user['IDContrato'],
+        "userLogin":user['Login']
+    };
+   
+    $.ajax({
+        type: "post",
+        data: {
+            'dados': JSONdata,
+        },
+        url: 'http://' + ip + '/Compras/ConfirmarCompra',
+        success: function (resultado) {
+         
+            $('#investimentos ul').empty();
+            myApp.hidePreloader();
+            var msg = '<p class="Investimento-msg"> Descrição: ' + resultado["Titulo"] + '</p> <p class="Investimento-msg"> Valor: ' + resultado["Valor"] + '</p>';
+            myApp.modal({
+                title: 'Investimento',
+                text: msg,
+                verticalButtons: true,
+                buttons: [
+                    {
+                        text: '<dir class="invest_ok upgrade-icon">Investir</div>',
+                        onClick: function () {
+                            var JSONdata = {
+                                "ID": resultado["ID"],
+                                "userID": user['IDContrato'],
+                                "userLogin": user['Login']
+                            };
+                            $.ajax({
+
+                                type: "post",
+                                data: {
+                                    'dados': JSONdata,
+                                },
+                                url: 'http://' + ip + '/Compras/CheckoutOdds',
+                                success: function (resultado) {
+                                    
+                                    if (resultado == "Fatura gerada com sucesso") {
+                                       
+                                        mainView.router.loadPage('fatura.html');
+                                        renderFatura();
+                                        
+                                    }
+                                    else {
+                                        myApp.alert(resultado, 'Investimento');
+                                    }
+                                                                      
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    myApp.alert('Erro de Conexão', 'Investimento');
+
+                                    myApp.hidePreloader();
+                                    renderPaginaInicial();
+                                }
+
+                            });
+                        }
+                    },
+                    {
+                        text: '<dir class="invest_voltar voltar-icon">Voltar</div>', 
+                        onClick: function () {
+                            myApp.alert('You clicked second button!')
+                        }
+                    },
+                   
+                ]
+            })
+
+          
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.alert('Erro de Conexão', 'Investimento');
+
+            myApp.hidePreloader();
+            renderPaginaInicial();
+        }
+
+    });
+}

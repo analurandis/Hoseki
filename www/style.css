@@ -244,13 +244,21 @@ font-weight:300;
     background-position: 10px 50%;
 }
 .investimento-icon {
-    background: url('images/icons/white/dolar.png');
+
+    background: url('images/icons/white/check-circle.png');
     background-size: auto 50%;
     background-repeat: no-repeat;
     background-position: 10px 50%;
 }
 .upgrade-icon {
     background: url('images/icons/white/upgrade.png');
+    background-size: auto 50%;
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+}
+.voltar-icon {
+    background: url('images/icons/white/voltar.png');
+   
     background-size: auto 50%;
     background-repeat: no-repeat;
     background-position: 10px 50%;
@@ -1378,4 +1386,49 @@ div[class*="col-"] {
 #Pendente {
     background-color: rgba(248, 109, 0, 0.3);
    
+}
+#investimentos ul.features_list_detailed li {
+    padding: 5px 0px 10px 5px;
+    margin: 0 10px 0px 0;
+    display: block;
+    width: 96%;
+    float: left;
+    clear: both;
+    border: 4px #0c4545 solid;
+    background-color: rgba(144,238,144,0.4);
+    border-radius: 9px;
+    font-size: 5vw;
+    font-weight:500;
+
+}
+#investimentos .col-50 {
+    margin-bottom: -30px;
+    background-color: rgba(255,255,255,0.0);
+
+}
+#investimentos #btn_comprar {
+    background-color: #0c4545;
+    color: white;
+    font-weight: 600;
+    font-size: 5vw;
+}
+.Investimento-msg {
+    font-weight: 600;
+    font-size: 5vw;
+}
+.invest_voltar {
+    background-color: #939191;
+    margin: 0px;
+    margin-right: -10px;
+    margin-left: -10px;
+    color: aliceblue;
+    font-weight: 500;
+}
+.invest_ok {
+    background-color: #178727;
+    margin: 0px;
+    margin-right: -10px;
+    margin-left: -10px;
+    color: aliceblue;
+    font-weight: 500;
 }
