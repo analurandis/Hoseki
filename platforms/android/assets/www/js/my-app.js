@@ -1,4 +1,6 @@
-﻿var ip = '192.168.0.11';
+﻿var Tempoajax = 600000;
+    
+var ip = '192.168.0.11';
 
 //var ip = 'localhost:56747';
 
@@ -33,11 +35,11 @@ var mainView = myApp.addView('.view-main', {
 
 
 });
-
-
-
 $$(document).on('pageInit', function (e) {
 
+    
+      
+   
 
     $(".swipebox").swipebox();
     $(".videocontainer").fitVids();
@@ -199,7 +201,7 @@ function numeroParaMoeda(n, c, d, t) {
 }
 
 function renderPaginaInicial() {
-
+    mainView.router.loadPage('index.html');
     var pes = user['NomePessoa'];
     $('.dados-usuario p').html(pes);
     id = user['IDContrato']
@@ -208,12 +210,12 @@ function renderPaginaInicial() {
     };
     $.ajax({
         type: "post",
-
+        timeout: Tempoajax,
         url: 'http://' + ip + '/Inicial/Dashboard',
         data: { 'id': JSONdata },
         dataType: "json",
         success: function (resultado) {
-
+          
             var plano = user['Plano'];
 
             $('#plano-atual').html(plano);
@@ -255,13 +257,14 @@ function renderFatura() {
     $.ajax({
         type: "post",
         url: 'http://' + ip + '/Financeiro/FaturaMobile',
+        timeout: Tempoajax,
         data: { 'IDContrato': IDContrato },
         dataType: "json",
         success: function (resultado) {
             $('#faturas ul').empty();
             var obj = (resultado['query']);
             $.each(obj, function (key, value) {
-                var li = '<li id=' + value.Situacao + '> '
+              var li = '<li id=' + value.Situacao + '> '
                     + '<div> <div class="faturatitulo grupo"> Código:  </div> <div class="esquerda" id="IDFatura">' + value.IDFatura + '</div> </div > '
                     + '<div> <div class="faturatitulo grupo"> Descrição:  </div> <div class="esquerda">' + value.Descricao + '</div> </div > '
                     + '<div> <div class="faturatitulo grupo"> Data:  </div>  <div class=" esquerda">' + value.Data + '</div></div>'
@@ -271,13 +274,13 @@ function renderFatura() {
                     + '</div>';
                 if (value.IDSituacao == 1) {
                   
-                    $('#faturas ul').append(li + '<a href="pgFatura.html" onclick="renderTipoPagamento(' + value.IDFatura + ',' + value.Valor + ');" class="button_small " id="btn_pagar" ><i class="fa-icon fa fa-credit-card "></i>Pagar</a> </div>');
+                    $('#pendentes #faturas ul').append(li + '<a href="pgFatura.html" onclick="renderTipoPagamento(' + value.IDFatura + ',' + value.Valor + ');" class="button_small " id="btn_pagar" ><i class="fa-icon fa fa-credit-card "></i>Pagar</a> </div>');
                   
                 } 
                 
                 else {
                    
-                    $('#faturas ul').append(li + '</li>');
+                    $('#pagas #faturas ul').append(li + '</li>');
                        
                     }
           
@@ -303,6 +306,7 @@ function renderTipoPagamento(ID, Valor) {
     $.ajax({
         type: "post",
         url: 'http://' + ip + '/Financeiro/TipoPagamento',
+        timeout: Tempoajax,
         data: { 'ID': ID },
         dataType: "json",
         success: function (resultado) {
@@ -330,6 +334,7 @@ function renderPagamentoCredito(ID) {
     $.ajax({
         type: "post",
         url: 'http://' + ip + '/Financeiro/FaturePay',
+        timeout: Tempoajax,
         data: { 'dados': guid },
         dataType: "json",
         success: function (resultado) {
@@ -400,6 +405,7 @@ function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
     $.ajax({
         type: "post",
         url: 'http://' + ip + '/Financeiro/FaturePayAvancar',
+        timeout: Tempoajax,
         data: {
             'dados': JSONdata,
             'model2': model
@@ -468,6 +474,7 @@ function renderInvestimentos() {
     $.ajax({
         type: "post",
         url: 'http://' + ip + '/Compras/BuyOdds',
+        timeout: Tempoajax,
         success: function (resultado) {
           
             $('#investimentos ul').empty();
@@ -513,9 +520,9 @@ function renderComprarInvestimento(id) {
             'dados': JSONdata,
         },
         url: 'http://' + ip + '/Compras/ConfirmarCompra',
+        timeout: Tempoajax,
         success: function (resultado) {
-         
-            $('#investimentos ul').empty();
+        
             myApp.hidePreloader();
             var msg = '<p class="Investimento-msg"> Descrição: ' + resultado["Titulo"] + '</p> <p class="Investimento-msg"> Valor: ' + resultado["Valor"] + '</p>';
             myApp.modal({
@@ -538,6 +545,7 @@ function renderComprarInvestimento(id) {
                                     'dados': JSONdata,
                                 },
                                 url: 'http://' + ip + '/Compras/CheckoutOdds',
+                                timeout: Tempoajax,
                                 success: function (resultado) {
                                     
                                     if (resultado == "Fatura gerada com sucesso") {
@@ -583,3 +591,99 @@ function renderComprarInvestimento(id) {
 
     });
 }
+
+var carteiras; 
+function renderFinanceiro() {
+    myApp.showPreloader();
+    $('#tipo_financeiro').html("");
+    $('#retorno_financeiro').html("");
+    $('#table-financeiro tbody').empty();
+    $('#table-financeiro').addClass('hidden');
+    $.ajax({
+        type: "post",
+        url: 'http://' + ip + '/Financeiro/Carteiras',
+        timeout: Tempoajax,
+        success: function (resultado) {
+           
+            carteiras = resultado['model'];
+            $.each(carteiras, function (key, value) {
+                var li = '<li> <a href= "#" onclick= "renderRelatorioFinanceiro(' + value.ID + ');" class="button-fill button " id= "btn_comprar" > <i class="fa-icon fa fa-database"></i>' + value.Nome + '</a > </p > </li >'
+                $('#financeiro ul').append(li);
+
+            });
+            myApp.hidePreloader();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.alert('Erro de Conexão', 'Financeiro');
+
+            myApp.hidePreloader();
+            renderPaginaInicial();
+        }
+
+    });
+
+}
+
+function renderRelatorioFinanceiro(ID) {
+    myApp.showPreloader();
+    var JSONdata = {
+        "ID": ID,
+        "user": user['IDContrato'],
+    };
+    $.ajax({
+        type: "post",
+        data: {
+            'dados': JSONdata,
+        },
+        url: 'http://' + ip + '/Financeiro/RelatorioFinanceiro',
+        timeout: Tempoajax,
+        success: function (resultado) {
+            
+            $('#financeiro ul').empty();
+         
+            
+            $.each(carteiras, function (key, value) {
+                if (value.ID == ID) {
+                    
+                    $('#tipo_financeiro').html(value.Nome);
+                }
+
+            });
+            var obj = resultado['model'];
+            if (resultado['iTotalRecords'] > 0) {
+                $('#table-financeiro').removeClass('hidden');
+                $('#table-financeiro tbody').empty();
+                var tr;
+
+
+
+                $.each(obj, function (key, value) {
+                    var str = value.Descricao;
+                    var res = str.replace("_", " ");
+                    tr = '<tr>'
+                        + '<td class="label-cell">' + value.Data + '</td>'
+                        + '<td class="tablet-only">' + res + '</td>'
+                        + '<td class="numeric-cell">' + value.Valor + '</td>'
+                        + '<td class="numeric-cell">' + value.Saldo + '</td>'
+                        + '</tr>'
+
+
+                    $('#table-financeiro').append(tr);
+
+                });
+            }
+            else {
+                $('#retorno_financeiro').html("Sem dados registrados")
+            }
+            myApp.hidePreloader();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.alert('Erro de Conexão', 'Financeiro');
+
+            myApp.hidePreloader();
+            renderPaginaInicial();
+        }
+
+    });
+}
+

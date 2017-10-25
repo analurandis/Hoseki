@@ -243,6 +243,12 @@ font-weight:300;
     background-repeat: no-repeat;
     background-position: 10px 50%;
 }
+.database-icon {
+    background: url('images/icons/white/database.png');
+    background-size: auto 50%;
+    background-repeat: no-repeat;
+    background-position: 10px 50%;
+}
 .investimento-icon {
 
     background: url('images/icons/white/check-circle.png');
@@ -412,7 +418,7 @@ color:#FFFFFF;
 }
 .navbar{
 height: 60px;
-margin-top :10px;
+margin-top :0px;
 }
 .toolbar {
 height: 100px;
@@ -422,35 +428,35 @@ background-color:#313131;
 position: fixed;
 top:0px;
 width:100%;
-height:60px;
+height:90px;
 }
-.menu_open_icon{ 
-background:url(images/menu_open.png) no-repeat center;
+.menu_open_icon {
+    background: url(images/menu_open.png) no-repeat center;
 }
 .menu_open_icon_white a{
 display:block;
 float:right;
-width:10%;
+width:30%;
 height:100%;
-margin:18px 0 0 0;
+margin:25px 0 0 0;
 padding:0 0 0 0;
 text-align:center;
 }
 .navbar_home_link a{
 float:left;
-width:23%;
+width:25%;
 padding:15px 0 0 3%;
 }
 .navbar_home_link img{
 max-width:20%;
 }
 .navbar_page_center{
-width:50%;
+width:45%;
 float:left;
-line-height:50px;
+line-height:60px;
 text-align:center;
 color:#FFFFFF;
-font-size:18px;
+font-size:22px;
 }
 /* 5.1 FOOTER TOOLBAR */
 ul.toolbar_icons{
@@ -1266,6 +1272,7 @@ top: 50px;
     position: fixed;
     top: 1px;
     background-color: rgba(47,79,79,0.5);
+    width:100%;
     
 }
 .dados-usuario p {
@@ -1319,6 +1326,9 @@ top: 50px;
 }
 .hidden{
     display:none;
+}
+.show{
+    display:block;
 }
 #faturas{
     
@@ -1412,6 +1422,7 @@ div[class*="col-"] {
     font-weight: 600;
     font-size: 5vw;
 }
+/*MODEL INVESTIMENTOS E FINANCEIRO*/
 .Investimento-msg {
     font-weight: 600;
     font-size: 5vw;
@@ -1431,4 +1442,99 @@ div[class*="col-"] {
     margin-left: -10px;
     color: aliceblue;
     font-weight: 500;
+}
+.modal{
+    background-color:#FFFFF4;
+    width:80%;
+    margin-left:-40%;
+    
+   
+}
+.modal-title {
+    color: black;
+    font-weight: 600;
+}
+.financeiro {
+    background-color: #0c4545;
+    border:solid;
+    border-radius:2px;
+    margin:1px;
+    margin-right: -10px;
+    margin-left: -10px;
+    color: white;
+    font-weight: 500;
+    
+   
+}
+/* CSS TABS - FATURA*/
+.buttons-row {
+    margin: -10vw 0 -8vw 0;
+    padding-top: 0px;
+}
+.buttons-row .button {
+    background-color: white;
+    color: #0c4545;
+    font-size: 4vw;
+    font-weight: 500;
+}
+.buttons-row .active {
+    background-color: #0c4545;
+    color:#ddd;
+    font-size:4vw;
+    font-weight:500;
+}
+#financeiro .features_list_detailed li{
+    background-color: #fff;
+}
+#financeiro .features_list_detailed li a {
+    background-color: #0c4545;
+}
+#financeiro .features_list_detailed li a:hover {
+    background-color: #2d6464;
+}
+table {
+    margin-top: -10px;
+    margin-left: 1px;
+    margin-right: 10px;
+}
+
+thead {
+    margin-right: 10px;
+}
+
+tr:hover {
+    background-color: #0c928d;
+    color: #000;
+}
+thead tr:hover {
+    background-color: transparent;
+    color: #000;
+}
+thead tr {
+  
+    color: black ;
+    font-size:5vw;
+    font-weight:900;
+  
+    
+}
+
+tr:nth-child(even) {
+    background-color: #c8e4e4;
+}
+tr:nth-child(even):hover{
+    background-color: #0c928d;
+}
+
+th {
+    font-weight: normal;
+    text-align: left;
+    
+}
+
+th, td {
+    border-bottom: solid;
+    border-style:inset;
+    padding-top: 5px;
+    padding-bottom: 10px;
 }
