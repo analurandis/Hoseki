@@ -1,4 +1,4 @@
-﻿var Tempoajax = 600000;
+﻿var Tempoajax = 30000;
     
 var ip = '192.168.0.11';
 
@@ -8,7 +8,8 @@ var ip = '192.168.0.11';
 /*var user = {
    IDContrato: 10038,
    NomePessoa : 'Day',
-   Plano : 'Investidor'
+   Plano: 'Investidor',
+   Login: 'Day'
 };*/
 var user;
 //var IDContrato = 10038;
@@ -200,8 +201,9 @@ function numeroParaMoeda(n, c, d, t) {
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 }
 
+
 function renderPaginaInicial() {
-    mainView.router.loadPage('index.html');
+   // mainView.router.loadPage('index.html');
     var pes = user['NomePessoa'];
     $('.dados-usuario p').html(pes);
     id = user['IDContrato']
@@ -366,31 +368,9 @@ function renderPagamentoCredito(ID) {
     });
 };
 
-$$(document).on('pageInit', function (e) {
-    var page = e.detail.page;
+function somenteNumeros(num) {
     
-    if (page.name === 'sistema') {
-        $('#formSistema').validate({
-
-            rules: {
-                senha: { required: true, minlength: 3 }
-            },
-            messages: {
-                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' }
-            },
-            errorPlacement: function (error, element) {
-                error.insertBefore(element);
-            },
-            submitHandler: function (form) {
-
-                var carteira = $("#select-carteira").val();
-                var senha = $("#senha").val();
-                renderPagamentoCreditoSistemaAvancar(senha, carteira);
-                return false;
-            }
-        });
-    }
-});
+}
 
 
 function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
@@ -572,7 +552,7 @@ function renderComprarInvestimento(id) {
                     {
                         text: '<dir class="invest_voltar voltar-icon">Voltar</div>', 
                         onClick: function () {
-                            myApp.alert('You clicked second button!')
+                            
                         }
                     },
                    
@@ -595,6 +575,7 @@ function renderComprarInvestimento(id) {
 var carteiras; 
 function renderFinanceiro() {
     myApp.showPreloader();
+    $('#financeiro ul').empty();
     $('#tipo_financeiro').html("");
     $('#retorno_financeiro').html("");
     $('#table-financeiro tbody').empty();
@@ -638,19 +619,25 @@ function renderRelatorioFinanceiro(ID) {
         url: 'http://' + ip + '/Financeiro/RelatorioFinanceiro',
         timeout: Tempoajax,
         success: function (resultado) {
-            
-            $('#financeiro ul').empty();
-         
-            
             $.each(carteiras, function (key, value) {
                 if (value.ID == ID) {
-                    
+
                     $('#tipo_financeiro').html(value.Nome);
                 }
 
             });
+           
+            
+           
             var obj = resultado['model'];
             if (resultado['iTotalRecords'] > 0) {
+                $('#financeiro ul').empty();
+                var li = '<div id="financeiro_botoes"><li> <a href= "FinanceiroTransfer.html" onclick= "renderTranferencia(' + ID + ');" class=" button  " id= "" > <i class="fa-icon fa fa-exchange"></i>Transferencia</a ></li>'
+                    + '<li><a href= "#" onclick= "renderPagamento(' + ID + ');" class="button   " id= "" > <i class="fa-icon fa fa-money"></i>Pagamento</a > </li>'
+                    + '<li><a href="#" onclick="renderRequisitarSaque(' + ID + ');" class="button  " id="" > <i class="fa-icon fa fa-money"></i>Requisitar Saque</a > </li></div>';
+                $('#financeiro ul').append(li);
+
+
                 $('#table-financeiro').removeClass('hidden');
                 $('#table-financeiro tbody').empty();
                 var tr;
@@ -686,4 +673,253 @@ function renderRelatorioFinanceiro(ID) {
 
     });
 }
+var transferencia;
+function renderTranferencia(ID) {
+    myApp.showPreloader();
+    var JSONdata = {
+        "ID": ID,
+        "user": user['IDContrato'],
+    };
+    $.ajax({
+        type: "post",
+        data: {
+            'dados': JSONdata,
+        },
+        url: 'http://' + ip + '/Financeiro/Transfer',
+        timeout: Tempoajax,
+        success: function (resultado) {
+           
+            if (resultado['model'] != null) {
+                var valor = resultado['model']['Saldo'];
+                var val = numeroParaMoeda(valor, 2, ',', '.');
+                transferencia = resultado['model'];
+                $('#saldo').val(val);
 
+                var obj = (resultado['contas']);
+                $.each(obj, function (key, value) {
+                    $('#select-carteira').append('<option value="' + value.Value + '">' + value.Text + '</option>');
+
+                });
+
+
+             
+                if ($('#select-carteira option:selected').text() != "Contrato") {
+                    $('#login_Contrato').removeClass('show');
+                    $('#login_Contrato').addClass('hidden');
+                    $('#login').removeAttr('required');
+                  
+                    $("#login").rules("remove");
+                }
+                else {
+                    $('#login_Contrato').removeClass('hidden');
+                    $('#login_Contrato').addClass('show');
+                  
+                    $('#login').attr('required', 'required');
+                    $('#login').each(function () {
+                        $(this).rules('add', {
+                            required: true,
+                            messages: {
+                                required: "Login Necessário"
+                            }
+                        });
+                    });
+                    
+                }
+
+            }
+              
+
+
+          
+            
+            myApp.hidePreloader();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.alert('Erro de Conexão', 'Financeiro');
+
+            myApp.hidePreloader();
+            renderPaginaInicial();
+        }
+
+    });
+
+}
+function renderEfetivarTransferencia() {
+    var valor = $('#valor').val().split(',')[0].replace(".", "");
+    transferencia['Login'] = $('#login').val();
+    transferencia['ValorTotal'] = valor;
+    transferencia['Valor'] = valor;
+    transferencia['Senha'] = $('#senha').val();
+    transferencia['IDConta'] = $('#select-carteira option:selected').val()
+    myApp.showPreloader();
+
+    $.ajax({
+        type: "post",
+        data: {
+            'model': transferencia,
+            'IDOperador': user['IDContrato'],
+            'Login': user['Login'],
+        },
+        url: 'http://' + ip + '/Financeiro/EfetivarTransfer',
+        timeout: Tempoajax,
+        success: function (resultado) {
+            if (resultado['retorno'] == 'Transferido com Sucesso!') {
+                myApp.hidePreloader();
+                myApp.alert(resultado['retorno'], 'Financeiro', function () {
+                    mainView.router.loadPage('financeiro.html');
+                    renderFinanceiro();
+                });
+                
+            } else {
+                myApp.alert(resultado['retorno'], 'Financeiro');
+            }
+
+            myApp.hidePreloader();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.alert('Erro de Conexão', 'Financeiro');
+
+            myApp.hidePreloader();
+            renderPaginaInicial();
+        }
+
+    });
+}
+function renderPagamento() {
+
+}
+function renderRequisitarSaque() {
+
+
+}
+
+
+
+$$(document).on('pageInit', function (e) {
+    var page = e.detail.page;
+
+    if (page.name === 'sistema') {
+        $('#formSistema').validate({
+
+            rules: {
+                senha: { required: true, minlength: 3 }
+            },
+            messages: {
+                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' }
+            },
+            errorPlacement: function (error, element) {
+                error.insertBefore(element);
+            },
+            submitHandler: function (form) {
+
+                var carteira = $("#select-carteira").val();
+                var senha = $("#senha").val();
+                renderPagamentoCreditoSistemaAvancar(senha, carteira);
+                return false;
+            }
+        });
+    }
+    if (page.name === 'transferencia') {
+ 
+        $('#formTransferencia').validate({
+            rules: {
+                senha: { required: true, minlength: 3 },
+                valor: { required: true}
+            },
+            messages: {
+                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' },
+                valor: { required: 'Valor de transferência necessário'}
+            },
+            errorPlacement: function (error, element) {
+                error.insertBefore(element);
+            },
+
+           
+            submitHandler: function (form) {
+                renderEfetivarTransferencia();
+
+
+                return false;
+            }
+        });
+    
+        
+        $('#select-carteira').on('change', function (e) {
+            
+            if ($('#select-carteira option:selected').text() != "Contrato") {
+                $('#login_Contrato').removeClass('show');
+                $('#login_Contrato').addClass('hidden');
+                $('#login').removeAttr('required');
+                $("#login").rules("remove");
+              
+            }
+            else {
+                $('#login_Contrato').removeClass('hidden');
+                $('#login_Contrato').addClass('show');
+                $('#login').attr('required', 'required');
+                $('#login').each(function () {
+                    $(this).rules('add', {
+                        required: true,
+                        messages: {
+                            required: "Login necessário"
+                        }
+                    });
+                });
+                
+            }
+         
+            var valor = $('#valor').val().split(',')[0].replace(".", "");
+            var IDCarteira = $('#select-carteira option:selected').val();
+            $.ajax({
+                type: "post",
+                data: {
+                    'IDCarteira': IDCarteira,
+                    'Guid': transferencia['Guid'],
+                    'ValorTransferencia': valor,
+                },
+                url: 'http://' + ip + '/Financeiro/GetTaxa',
+                timeout: Tempoajax,
+                success: function (resultado) {
+                    $('#taxa').val(resultado['Valor']);
+
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    myApp.alert('Erro de Conexão', 'Financeiro');
+
+                    myApp.hidePreloader();
+                    renderPaginaInicial();
+                }
+
+            });
+        });
+        $('#valor').on('change', function (e) {
+            var valor = $('#valor').val();
+            $('#valor').val(numeroParaMoeda(valor, 2, ',', '.'));
+            var IDCarteira = $('#select-carteira option:selected').val();
+            $.ajax({
+                type: "post",
+                data: {
+                    'IDCarteira': IDCarteira,
+                    'Guid': transferencia['Guid'],
+                    'ValorTransferencia': valor,
+                },
+                url: 'http://' + ip + '/Financeiro/GetTaxa',
+                timeout: Tempoajax,
+                success: function (resultado) {
+                    $('#taxa').val(resultado['Valor']);                
+
+               
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    myApp.alert('Erro de Conexão', 'Financeiro');
+
+                    myApp.hidePreloader();
+                    renderPaginaInicial();
+                }
+
+            });
+        });
+
+    }
+});

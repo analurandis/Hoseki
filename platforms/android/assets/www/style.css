@@ -1503,7 +1503,7 @@ thead {
 }
 
 tr:hover {
-    background-color: #0c928d;
+    background-color: #6a9090;
     color: #000;
 }
 thead tr:hover {
@@ -1522,9 +1522,9 @@ thead tr {
 tr:nth-child(even) {
     background-color: #c8e4e4;
 }
-tr:nth-child(even):hover{
-    background-color: #0c928d;
-}
+    tr:nth-child(even):hover {
+        background-color: #6a9090;
+    }
 
 th {
     font-weight: normal;
@@ -1537,4 +1537,14 @@ th, td {
     border-style:inset;
     padding-top: 5px;
     padding-bottom: 10px;
+}
+
+#financeiro .features_list_detailed #financeiro_botoes a {
+    background-color: #FFFFFF;
+    color: black;
+    font-weight:600;
+   margin: -7px 5px -7px 0px;
+}
+#financeiro .features_list_detailed #financeiro_botoes a:hover{
+    background-color: #6a9090;
 }
