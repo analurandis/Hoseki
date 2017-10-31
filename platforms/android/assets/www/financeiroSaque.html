@@ -1,0 +1,81 @@
+﻿<div class="pages">
+    <div data-page="saque" class="page no-toolbar no-navbar">
+        <div class="page-content">
+
+            <div class="navbarpages">
+
+                <div class="navbar_page_center">Financeiro</div>
+
+            </div>
+
+            <div id="pages_maincontent">
+
+                <h2 class="page_subtitle">Requisitar Saque</h2>
+                <div class="CreditoSistema">
+                    <div class="erro ">
+                        <p id="form_erro" class="hidden">Erro</p>
+                    </div>
+                    <form id="formSaque" method="post">
+
+                        <div class="commentform">
+
+                            <label for="saldo">Seu saldo</label>
+                            <input disabled id="saldo" name="saldo" type="text" value="" class="form_input required" />
+
+                            <label for="carteira">Para</label>
+                            <select name="select_carteira" id="select-carteira" required>
+                                <option selected value=""> </option>
+                            </select>
+
+
+                            <div id="carteira_conta" class="hidden">
+                                <label for="conta">Carteira</label>
+                                <input id="conta" name="conta" type="text" value="" class="form_input" />
+                            </div>
+                            <div id="conta_corrente" class="hidden">
+                                <label for="select_conta_corrente">Conta Corrente</label>
+                                <select name="select_conta_corrente" id="select_conta_corrente">
+                                    <option selected value=""> </option>
+                                </select>
+                            </div>
+          
+
+                             <label for="valor">Valor</label>
+                            <input id="valor" name="valor" type="text" value="" class="form_input required" pattern="([0-9]{3}),([0-9]{2})" />
+
+                            <label for="taxa">Taxa</label>
+                            <input disabled id="taxa" name="taxa" type="text" value="" class="form_input required" />
+
+                            <div id="valor_bitcoin" class="hidden">
+                                <label for="valorbitcoin">Valor bitcoin</label>
+                                <input disabled id="valorbitcoin" name="valorbitcoin" type="text" value="" class="form_input required"  />
+                            </div>
+
+                            <label for="senha">Senha Secundária</label>
+                            <input id="senha" name="senha" type="password" value="" class="form_input required" />
+
+                            <div class="row">
+                                <div class="col-50">
+                                    <input type="submit" name="submit" class="button button-big button_ok " id="avancar" value="Sacar" />
+                                </div>
+                                <div class="col-50">
+                                    <a href="financeiro.html" id="voltar_financeiro" class="button button_voltar button-big" onclick="renderFinanceiro()"><i class="fa fa-exchange icon-pg "></i>  Cancelar</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+
+</script>

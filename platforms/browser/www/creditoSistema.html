@@ -1,5 +1,9 @@
-﻿<div class="pages">
-    <div data-page="projects" class="page no-toolbar no-navbar">
+﻿
+
+
+
+<div class="pages">
+    <div data-page="sistema" class="page no-toolbar no-navbar">
         <div class="page-content">
 
             <div class="navbarpages">
@@ -12,17 +16,17 @@
 
                 <h2 class="page_subtitle">Pagamento</h2>
                 <div class="CreditoSistema">
+                    <div class="erro " >
+                        <p id="form_erro" class="hidden" >Erro</p>
+                    </div>
                     <form id="formSistema" method="post">
 
                         <div class="commentform">
-
-
-
+                            
                             <label for="carteira">Carteira</label>
                             <select name="select-carteira" id="select-carteira">
                                                                
                             </select>
-
 
                             <label for="descricao">Descrição</label>
 
@@ -45,7 +49,7 @@
                                     <input type="submit" name="submit" class="button button-big button_ok " id="avancar" value="Avançar" />
                                 </div>
                                 <div class="col-50">
-                                    <a href="fatura.html" class="button button_voltar button-big" onclick="renderFatura()"><i class="fa fa-exchange icon-pg "></i>  Voltar</a>
+                                    <a href="fatura.html" id="voltar_fatura" class="button button_voltar button-big" onclick="renderFatura()"><i class="fa fa-exchange icon-pg "></i>  Voltar</a>
                                 </div>
                             </div>
 
@@ -63,5 +67,5 @@
     </div>
 
 <script>
-   
+
 </script>

@@ -19,5 +19,5 @@
     <access origin="http://localhost:56747/" />
     <access origin="http://192.168.0.11/" />
     <preference name="windows-target-version" value="10.0" />
-    <preference name="Fullscreen" value="True" />
+    <preference name="Fullscreen" value="False" />
 </widget>

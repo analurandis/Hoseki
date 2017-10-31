@@ -1,3 +1,7 @@
+/*
+    VARIÁVEIS
+
+*/
 
 /*
 [Table of Contents]
@@ -28,16 +32,15 @@
 /* 1. RESET		 						 */
 /*===============================================*/
 @import "css/reset.css";
-
 /*===============================================*/
 /* 2. GENERAL		 						 */
-/*===============================================*/	
+/*===============================================*/
 html,
 body {
-position: relative;
-height: 100%;
-width: 100%;
-overflow-x: hidden;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
 }
 body {
 font-family: 'Source Sans Pro', sans-serif;
@@ -654,17 +657,17 @@ list-style:none;
 float:left;
 clear:both;
 }
-    ul.features_list_detailed li {
-        padding: 5px 0 10px 5px;
-        margin: 0 0 10px 0;
-        display: block;
-        width: 100%;
-        float: left;
-        clear: both;
-        border-bottom: 1px #ddd solid;
-        background-color: rgba(144,238,144,0.5);
-        border-radius: 5px;
-    }
+ul.features_list_detailed li {
+    padding: 5px 0 10px 5px;
+    margin: 0 0 10px 0;
+    display: block;
+    width: 100%;
+    float: left;
+    clear: both;
+    border-bottom: 1px #ddd solid;
+    background-color: rgba(200,240,220,0.8);
+    border-radius: 5px;
+}
 
 ul.features_list_detailed li .feat_small_icon{
 width:30%;
@@ -678,7 +681,8 @@ padding:0 0 0 3%;
 }
 ul.features_list_detailed li .feat_small_details p{
 padding:0 0 10px 0;
-font-size: 1.8em;
+font-size: 1.2em;
+font-weight:400;
 }
 ul.features_list_detailed li .feat_small_icon img{
 display:inline-block;
@@ -1294,22 +1298,16 @@ top: 50px;
     background-color: #ed9c28;
 }
 .bg-info {
-    background-color: #5bc0de;
-    
+    background-color: #5bc0de;  
 }
-#situacao {
-    font-weight: 600;
-    border-top: solid;
+.bg-ativo {
+    background-color: #2f9d34;
+}
+.bg-negativo {
+    background-color: #e01d1d;
+}
 
-    text-align: center;
-    display: inline-block;
-}
-#binario-ativo {
-    font-weight: 600;
-    
-    text-align: center;
-    display: inline-block;
-}
+
 .logo-titulo {
     /*background-color: rgba(255,255,255,0.3);
     border-top: solid;

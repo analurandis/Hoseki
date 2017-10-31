@@ -101,7 +101,7 @@
 
                                         <li>
                                             <div class="feat_small_icon">
-                                                <div class="sumary-icon bg-warning"><i class="fa fa-sitemap"></i></div>
+                                                <div id="binario" class="sumary-icon"><i class="fa fa-sitemap"></i></div>
                                             </div>
                                             <div class="feat_small_details">
                                                 <h4>Binário Ativo</h4>
@@ -112,7 +112,7 @@
 
                                         <li>
                                             <div class="feat_small_icon">
-                                                <div class="sumary-icon bg-warning">
+                                                <div id="situ" class="sumary-icon">
                                                     <i class="fa fa-check"></i>
                                                 </div>
                                             </div>
@@ -344,7 +344,9 @@
                             var token = JSONdata['jwt'];
                             storage.setItem('token', token);
                             user = resultado['dados'];
+                       
                             myApp.alert('Login realizado com sucesso', 'Login', function () {
+                                
                                 renderPaginaInicial();
                                 myApp.closeModal('.login-screen');
 
