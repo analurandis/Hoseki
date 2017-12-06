@@ -85,6 +85,9 @@
     <Content Include="**\**" Exclude="**\platforms\**;**\bin\**;**\bld\**;**\node_modules\**;**\simulation\**;**\plugins\**;.gitignore;Hoseki.*" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="www\NovaPasta\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Remove="www\js\from_html.js" />
     <Content Remove="www\js\split_text_to_size.js" />
     <Content Remove="www\js\standard_fonts_metrics.js" />
@@ -93,8 +96,5 @@
     <Content Update="config.xml">
       <SubType>Designer</SubType>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="www\NovaPasta\NovaPasta\" />
   </ItemGroup>
 </Project>

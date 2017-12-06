@@ -5,15 +5,18 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 
+
     // deviceready Event Handler
     //
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function () {
         this.receivedEvent('deviceready');
+        document.addEventListener("backbutton", onBackKeyDown, false);
        // document.getElementById('fecharApp').addEventListener('click', function () {
          //   navigator.app.exitApp();
         //});
+
         
     },
 

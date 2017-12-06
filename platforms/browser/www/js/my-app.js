@@ -1,21 +1,27 @@
 ﻿var Tempoajax = 30000;
-    
-var ip = '192.168.0.11';
-
+var ip = '192.168.0.7';
 //var ip = 'localhost:56747';
 
-// Initialize your app7
-/*var user = {
-   IDContrato: 10038,
-   NomePessoa : 'Day',
-   Plano: 'Investidor',
-   Login: 'Day'
-};*/
 var user;
-//var IDContrato = 10038;
-//var id = 10038;
-//var pes = 'Day'
-
+var guid;
+var model;
+var carteiras; 
+var transferencia;
+var saque;
+//BANCO DE DADOS
+var appDB;
+$(document).ready(function (e) {
+    appDB = window.sqlitePlugin.openDatabase({ name: "Hoseki.db", location: 'default' });
+    myDB.transaction(function (transaction) {
+        transaction.executeSql('CREATE TABLE IF NOT EXISTS dispositivo (token text primary key)', [],
+            function (tx, result) {
+                alert("Table created successfully");
+            },
+            function (error) {
+                alert("Error occurred while creating the table.");
+            });
+    });
+});
 var myApp = new Framework7({
     animateNavBackIcon: true,
     // Enable templates auto precompilation
@@ -36,6 +42,16 @@ var mainView = myApp.addView('.view-main', {
 
 
 });
+
+
+function onDeviceReady() {
+    document.addEventListener("backbutton", onBackKeyDown, false);
+}
+// Handle the back button
+//
+function onBackKeyDown() {
+    navigator.app.exitApp();
+}
 $$(document).on('pageInit', function (e) {
 
     
@@ -173,9 +189,7 @@ $$(document).on('pageInit', function (e) {
 
 
 })
-function alerta() {
 
-}
 function fecharApp() {
     if (navigator.app) {
         myApp.openModal('.login-screen');
@@ -200,10 +214,8 @@ function numeroParaMoeda(n, c, d, t) {
     c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 }
-
-
 function renderPaginaInicial() {
-   // mainView.router.loadPage('index.html');
+    myApp.showIndicator();
     var pes = user['NomePessoa'];
     $('.dados-usuario p').html(pes);
     id = user['IDContrato']
@@ -224,31 +236,31 @@ function renderPaginaInicial() {
             $('#saldo').html(resultado['Saldo']);
             $('#binario-ativo').html(resultado['model']['DadosRede']['QualificadoBinario']);
             if (resultado['model']['DadosRede']['QualificadoBinario'] == "Sim") {
-                $('#binario-ativo').css({ "background": "#47a447", "color": "white", "border-color": "#47a447" });
+                $('#binario').addClass('bg-ativo');
             } else {
-                $('#binario-ativo').css({ "background": "#d2322d", "color": "white", "border-color": "#d2322d" });
+                $('#binario').addClass('bg-negativo');
             }
             var totalInv = numeroParaMoeda(resultado['model']['DadosPessoa']['ValorTotalInvestido'], 2, ',', '.');
             $('#total-investido').html("Total Investido: " + totalInv);
             $('#situacao').html(resultado['model']['DadosRede']['Situacao']);
 
             if (resultado['model']['DadosRede']['Situacao'] == "Ativo") {
-                $('#situacao').css({ "background": "#47a447", "color": "white", "border-color": "#47a447" });
+                $('#situ').addClass('bg-ativo');
             } else {
-                $('#situacao').css({ "background": "#d2322d", "color": "white", "border-color": "#d2322d" });
+                $('#situ').addClass('bg-negativo');
             }
 
-
+            myApp.hideIndicator();
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.hideIndicator();
             myApp.alert('Tela Inicial', 'Erro de Conexão')
 
         }
 
     });
 };
-
 $$('.open-login').on('click', function () {
     myApp.loginScreen();
 });
@@ -293,17 +305,17 @@ function renderFatura() {
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            myApp.alert('Erro de Conexão', 'Tela Inicial');
-
             myApp.hidePreloader();
-            renderPaginaInicial();
+            myApp.alert('Erro de Conexão', 'Tela Inicial', function () {
+                fecharApp();
+            });
+
+           
+  
         }
 
     });
 };
-
-var guid;
-
 function renderTipoPagamento(ID, Valor) {
     $.ajax({
         type: "post",
@@ -330,7 +342,6 @@ function renderTipoPagamento(ID, Valor) {
 
     });
 };
-var model;
 function renderPagamentoCredito(ID) {
     myApp.showPreloader();
     $.ajax({
@@ -367,12 +378,9 @@ function renderPagamentoCredito(ID) {
 
     });
 };
-
 function somenteNumeros(num) {
     
 }
-
-
 function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
 
     model['IDCarteira'] = carteira;
@@ -402,19 +410,12 @@ function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
             if (resultado["retorno"] == "sucesso") {
                 mainView.router.loadPage('fatura.html');
                 myApp.alert("Pagamento Realizado", 'Pagamento', function () {
-                    
                     renderFatura();
-
                 });
             }
-            if (resultado["retorno"] != null) {
-                $('#form_erro').removeClass('hidden');
-                $('#form_erro').html(resultado['retorno']);
-
-
+            if (resultado["retorno"] != null && resultado["retorno"] != "sucesso" ) {
+                myApp.alert(resultado['retorno'], 'Pagamento');
             }
-          
-
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
            
@@ -426,29 +427,16 @@ function renderPagamentoCreditoSistemaAvancar(senha, carteira) {
 
     });
 };
-
-
 function getBase64Encode(rawStr) {
     var wordArray = CryptoJS.enc.Utf8.parse(JSON.stringify(rawStr));
     var result = CryptoJS.enc.Base64.stringify(wordArray);
     return result;
 };
-
 function getBase64Decode(rawStr) {
     var wordArray = CryptoJS.enc.Base64.parse(rawStr);
     var result = wordArray.toString(CryptoJS.enc.Utf8);
     return result
 };
-function alertDismissed() {
-
-}
-function alertSucesso() {
-
-    renderPaginaInicial();
-    myApp.closeModal('.login-screen');
-
-}
-
 function renderInvestimentos() {
     myApp.showPreloader();
     $.ajax({
@@ -478,10 +466,10 @@ function renderInvestimentos() {
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            myApp.alert('Erro de Conexão', 'Tela Inicial');
-
             myApp.hidePreloader();
-            renderPaginaInicial();
+            myApp.alert('Erro de Conexão', 'Tela de Investimento', function () {
+                fecharApp();
+            });
         }
 
     });
@@ -540,10 +528,10 @@ function renderComprarInvestimento(id) {
                                                                       
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                    myApp.alert('Erro de Conexão', 'Investimento');
-
                                     myApp.hidePreloader();
-                                    renderPaginaInicial();
+                                    myApp.alert('Erro de Conexão', 'Tela de Investimento', function () {
+                                        fecharApp();
+                                    });
                                 }
 
                             });
@@ -563,16 +551,14 @@ function renderComprarInvestimento(id) {
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            myApp.alert('Erro de Conexão', 'Investimento');
-
             myApp.hidePreloader();
-            renderPaginaInicial();
+            myApp.alert('Erro de Conexão', 'Tela de Investimento', function () {
+                fecharApp();
+            });
         }
 
     });
 }
-
-var carteiras; 
 function renderFinanceiro() {
     myApp.showPreloader();
     $('#financeiro ul').empty();
@@ -595,16 +581,15 @@ function renderFinanceiro() {
             myApp.hidePreloader();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            myApp.alert('Erro de Conexão', 'Financeiro');
-
             myApp.hidePreloader();
-            renderPaginaInicial();
+            myApp.alert('Erro de Conexão', 'Tela Financeiro', function () {
+                fecharApp();
+            });
         }
 
     });
 
 }
-
 function renderRelatorioFinanceiro(ID) {
     myApp.showPreloader();
     var JSONdata = {
@@ -633,8 +618,8 @@ function renderRelatorioFinanceiro(ID) {
             if (resultado['iTotalRecords'] > 0) {
                 $('#financeiro ul').empty();
                 var li = '<div id="financeiro_botoes"><li> <a href= "FinanceiroTransfer.html" onclick= "renderTranferencia(' + ID + ');" class=" button  " id= "" > <i class="fa-icon fa fa-exchange"></i>Transferencia</a ></li>'
-                    + '<li><a href= "#" onclick= "renderPagamento(' + ID + ');" class="button   " id= "" > <i class="fa-icon fa fa-money"></i>Pagamento</a > </li>'
-                    + '<li><a href="#" onclick="renderRequisitarSaque(' + ID + ');" class="button  " id="" > <i class="fa-icon fa fa-money"></i>Requisitar Saque</a > </li></div>';
+                    + '<li><a href= "financeiroPagamento.html" onclick= "renderPagamento(' + ID + ');" class="button   " id= "" > <i class="fa-icon fa fa-money"></i>Pagamento</a > </li>'
+                    + '<li><a href="financeiroSaque.html" onclick="renderRequisitarSaque(' + ID + ');" class="button  " id="" > <i class="fa-icon fa fa-money"></i>Requisitar Saque</a > </li></div>';
                 $('#financeiro ul').append(li);
 
 
@@ -665,15 +650,14 @@ function renderRelatorioFinanceiro(ID) {
             myApp.hidePreloader();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            myApp.alert('Erro de Conexão', 'Financeiro');
-
             myApp.hidePreloader();
-            renderPaginaInicial();
+            myApp.alert('Erro de Conexão', 'Tela Financeiro', function () {
+                fecharApp();
+            });
         }
 
     });
 }
-var transferencia;
 function renderTranferencia(ID) {
     myApp.showPreloader();
     var JSONdata = {
@@ -701,8 +685,6 @@ function renderTranferencia(ID) {
 
                 });
 
-
-             
                 if ($('#select-carteira option:selected').text() != "Contrato") {
                     $('#login_Contrato').removeClass('show');
                     $('#login_Contrato').addClass('hidden');
@@ -725,20 +707,14 @@ function renderTranferencia(ID) {
                     });
                     
                 }
-
             }
-              
-
-
-          
-            
             myApp.hidePreloader();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            myApp.alert('Erro de Conexão', 'Financeiro');
-
             myApp.hidePreloader();
-            renderPaginaInicial();
+            myApp.alert('Erro de Conexão', 'Tela de Transferência', function () {
+                fecharApp();
+            });
         }
 
     });
@@ -776,27 +752,355 @@ function renderEfetivarTransferencia() {
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            myApp.alert('Erro de Conexão', 'Financeiro');
-
             myApp.hidePreloader();
-            renderPaginaInicial();
+            myApp.alert('Erro de Conexão', 'Tela de Transferência', function () {
+                fecharApp();
+            });
         }
 
     });
 }
-function renderPagamento() {
+function renderPagamento(ID) {
+    myApp.showPreloader();
+    $.ajax({
+        type: "post",
+        url: 'http://' + ip + '/Financeiro/Pagamento',
+        timeout: Tempoajax,
+        data: {
+            'ID': ID,
+            'IDOperador':  user['IDContrato']
+        },
+        dataType: "json",
+        success: function (resultado) {
+
+            if (resultado['model']) {
+                model = resultado['model'];
+                var val = numeroParaMoeda(valor, 2, ',', '.');
+                $('#saldo').val(numeroParaMoeda(model['Saldo'], 2, ',', '.'));
+                $('#taxa').val(numeroParaMoeda(model['ValorTaxa'], 2, ',', '.'));
+            }
+            myApp.hidePreloader();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+            myApp.hidePreloader();
+            myApp.alert('Erro de Conexão', 'Pagamento Financeiro');
+
+
+        }
+
+    });
 
 }
-function renderRequisitarSaque() {
+function renderEfetivarPagamento() {
+
+    myApp.showPreloader();
+    model['CodigoFatura'] = $('#codigo').val()
+    model['Valor'] = numeroParaMoeda($('#valor').val(), 2, ',', '.');
+    model['Senha'] = $('#senha').val();
+    model['ValorTaxa'] = numeroParaMoeda($('#taxa').val(), 2, ',', '.');
+    model['Login'] = $('#login').val();
+    model['Descricao'] = $('#descricao').val()
+
+    model['Senha'] = $('#senha').val();
+    $.ajax({
+        type: "post",
+        data: {
+            'model': model,
+            'IDOperador': user['IDContrato'],
+        },
+        url: 'http://' + ip + '/Financeiro/EfetivarPagamento',
+        timeout: Tempoajax,
+        success: function (resultado) {
+            myApp.hidePreloader();
+
+            if (resultado['msg']) {
+                myApp.alert('Pagamento realizado com sucesso', 'Financeiro', function () {
+                    mainView.router.loadPage('financeiro.html');
+                    renderFinanceiro();
+                });
+            }
+            else {
+                myApp.alert(resultado['retorno'], 'Financeiro');
+            }
 
 
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.hidePreloader();
+            myApp.alert('Erro de Conexão', 'Tela de pagamentos', function () {
+                fecharApp();
+            });
+        }
+
+    });
 }
 
+function renderRequisitarSaque(ID) {
+    myApp.showPreloader();
+    $.ajax({
+        type: "post",
+        data: {
+            'IDOperador': user['IDContrato'],
+            'ID':ID,
+            'IDPessoa': user['IDPessoa']
+        },
+        url: 'http://' + ip + '/Financeiro/RequisitarSaque',
+        timeout: Tempoajax,
+        success: function (resultado) {
+          
+           
+            if (resultado['model'] != null) {
+                saque = resultado['model'];
+                var valor = resultado['model']['Saldo'];
+                var val = numeroParaMoeda(valor, 2, ',', '.');
+                
+                $('#saldo').val(val);
+                $('#taxa').val(numeroParaMoeda(resultado['model']['Taxa'], 2, ',', '.'));
+                $('#valor').val(numeroParaMoeda(resultado['model']['Valor'], 2, ',', '.'));
+                $('#valorbitcoin').val(resultado['ValorBitCoin']);
+                $('#conta').val(resultado['model']['Carteira']);
+                if (resultado['ContaCorrente'] != null) {
+                   
+                    var obj = (resultado['ContaCorrente']);
+                    $.each(obj, function (key, value) {
+                        $('#select_conta_corrente').append('<option value="' + value.Value + '">' + value.Text + '</option>');
+                    });
+                }
+                if (resultado['Tipo'] != null) {
+                    var obj = (resultado['Tipo']);
+                    $.each(obj, function (key, value) {
 
+                        $('#select-carteira').append('<option value="' + value.Value + '">' + value.Text + '</option>');
+
+                    });
+                }
+               
+            }
+            if (resultado['retorno']) {
+                myApp.alert(resultado['retorno'], 'Requisiçao de Saque', function () {
+                    mainView.router.loadPage('financeiro.html');
+                    renderFinanceiro();
+                });
+            }
+            
+
+            myApp.hidePreloader();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.hidePreloader();
+            myApp.alert('Erro de Conexão', 'Tela de Requisição de Saque', function () {
+                fecharApp();
+            });
+        }
+
+    });
+}
+
+function renderEfetivarSaque() {
+    var valor = $('#valor').val().split(',')[0].replace(".", "");
+    saque['Valor'] = valor;
+    saque['IDContaCorrente'] = $('#select_conta_corrente').val();
+    saque['Senha'] = $('#senha').val();
+    saque['IDTipo'] = $('#select-carteira option:selected').val()
+    myApp.showPreloader();
+
+    $.ajax({
+        type: "post",
+        data: {
+            'model': saque,
+            'IDOperador': user['IDContrato'],
+            'IDPessoa': user['IDPessoa']
+        },
+        url: 'http://' + ip + '/Financeiro/EfetivarSaque',
+        timeout: Tempoajax,
+        success: function (resultado) {
+            myApp.hidePreloader();
+
+            if (resultado == "Sucesso") {
+                myApp.alert('Requisição de Saque realizada com sucesso', 'Financeiro', function () {
+                    mainView.router.loadPage('financeiro.html');
+                    renderFinanceiro();
+                });
+            }
+            else {
+                myApp.alert(resultado['retorno'], 'Financeiro');
+            }
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.hidePreloader();
+            myApp.alert('Erro de Conexão', 'Tela de Requisição de Saque', function () {
+                fecharApp();
+            });
+        }
+
+    });
+}
+
+function renderRedeLinear(){
+    myApp.showPreloader();
+    var IDContrato = user['IDContrato'];
+
+    $.ajax({
+        type: "post",
+        url: 'http://' + ip + '/Rede/Linear',
+        timeout: Tempoajax,
+        data: { 'IDOperador': user['IDContrato']},
+        dataType: "json",
+        success: function (resultado) {
+         
+            $('#rede ul').empty();
+            var obj = (resultado['model']['Lista']);
+            $.each(obj, function (key, value) {
+                obj[key]['tamanho'] = 1;
+                if (value.Graduacao == null) {
+                    value.Graduacao = "";
+                }
+                switch (value.Perna) {
+                    case "E":
+                        value.Perna = "Esquerda";
+                        break;
+                    case "D":
+                        value.Perna = "Direita";
+                        break;
+                    default:
+                        value.Perna = "";
+                }
+             
+                var li =
+                    '<li id="' + value.ID + '"class="' + value.ID + ' 0" onclick="renderLinhaLinear(' + value.ID + ')">'
+                    + '<div class="dados">'
+                    + '<div class="tamanho hidden">'
+                    +value.tamanho
+                    +'</div>'
+                    + '<div class=row>'
+                    + '<div class="col-20">'
+                    + '<img src="' + value.Icone + '" title="" />'
+                    + '</div>'
+                    + '<div class="col-80" id="">'
+                    + '<h4>Login</h4>' + value.Descricao
+                    + '</div></div></div>'
+
+                    + '<div class="data-table data-table-init ">'
+                    + '<table>'
+                    + '<thead>'
+                    + '<tr>'
+                    + '<th>Perna</th>'
+                    + '<th>Graduação</th>'
+                    + '<th>Situação</th>'
+                    + '<th>Ativo Mensal</th>'
+                    +'<th>Direto</th>'
+                    +'</tr>'
+                    +'</thead>'
+                    +'<tbody>'
+                    +'<tr>'
+                    + '<td>' + value.Perna + '</td>'
+                    +'<td>'+value.Graduacao+'</td>'
+                    + '<td>' + value.Situacao + '</td>'
+                    + '<td>' + value.AtivoMensal + '</td>'
+                                        +'<td>'+value.TotalDiretos+'</td>'
+                                    +'</tr>'
+                                +' </tbody>'
+                            +'</table>'
+                        +'</div>  '                              
+                    +'</li >'
+                $('#rede ul').append(li);
+            });
+
+          
+
+            myApp.hidePreloader();
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.hidePreloader();
+            myApp.alert('Erro de Conexão', 'Tela Inicial', function () {
+                fecharApp();
+            });
+
+
+
+        }
+
+    });
+};
+
+
+function renderLinhaLinear(ID) {
+    
+    if ($("#" + ID).hasClass("pai"+ID)) {
+        // $("#" + ID).remove("ul");
+        $("ul #filho" + ID).remove();
+        $("#" + ID).removeClass("pai"+ID)
+    } else {
+        var tamanho = $("#" + ID + " .tamanho").html();
+      
+        myApp.showIndicator();
+  //  var IDContrato = user['IDContrato'];
+    $.ajax({
+        type: "post",
+        url: 'http://' + ip + '/Rede/GetLinha',
+        timeout: Tempoajax,
+        data: { 'ID':ID },
+        dataType: "json",
+        success: function (resultado) {
+            if (resultado['Lista']!=null){
+                var obj = (resultado['Lista']);
+                var children = '#' + ID;
+                $(children).addClass("pai"+ID);
+            $.each(obj, function (key, value) {
+                obj[key]['tamanho'] = parseInt(tamanho) + 5;
+                var li =' <ul id="filho'+ID+'"><li id="' + value.ID + '" class=" children ' + value.ID + '" onclick="renderLinhaLinear(' + value.ID + ')">'
+                    + '<div class="dados-children">'
+                    + '<div class="tamanho hidden">'
+                    + value.tamanho
+                    + '</div>'
+                    + '<div class="row">'
+                    + '<div class="col-15">'
+                    + '<img src="' + value.Icone + '" title="" />'
+                    + '</div>'
+                    + '<div class="col-80">'
+                    + value.Descricao
+                    + '<h4>Diretos: ' + value.TotalDiretos
+                    + '</h4></div></div ></div >'
+                    + '</li><ul>';
+
+                $(li).insertAfter($(children));
+                $('#' + value.ID).css("margin-left", value.tamanho );
+                
+                if ($(children).hasClass("impar")) {
+                    $('#' + value.ID).addClass('par');
+                }
+                else {
+                    $('#' + value.ID).addClass('impar');
+                }
+               
+        });
+           
+            }
+
+            myApp.hideIndicator();
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert('Erro de Conexão', 'Tela Inicial', function () {
+                fecharApp();
+            });
+
+
+
+        }
+
+
+        });
+
+    }
+}
 
 $$(document).on('pageInit', function (e) {
     var page = e.detail.page;
-
     if (page.name === 'sistema') {
         $('#formSistema').validate({
 
@@ -884,10 +1188,10 @@ $$(document).on('pageInit', function (e) {
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    myApp.alert('Erro de Conexão', 'Financeiro');
-
                     myApp.hidePreloader();
-                    renderPaginaInicial();
+                    myApp.alert('Erro de Conexão', 'Tela Financeiro', function () {
+                        fecharApp();
+                    });
                 }
 
             });
@@ -911,14 +1215,257 @@ $$(document).on('pageInit', function (e) {
                
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    myApp.alert('Erro de Conexão', 'Financeiro');
-
                     myApp.hidePreloader();
-                    renderPaginaInicial();
+                    myApp.alert('Erro de Conexão', 'Tela Financeiro', function () {
+                        fecharApp();
+                    });
                 }
 
             });
         });
 
+    }
+    if (page.name === 'saque') {
+        $('#formSaque').validate({
+            rules: {
+                senha: { required: true, minlength: 3 },
+                valor: { required: true },
+                select_carteira: { required: true }
+            },
+            messages: {
+                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' },
+                valor: { required: 'Valor de transferência necessário' },
+                select_carteira: { required: 'Selecione uma opção de saque' }
+            },
+            errorPlacement: function (error, element) {
+                error.insertBefore(element);
+            },
+
+
+            submitHandler: function (form) {
+                renderEfetivarSaque();
+
+
+                return false;
+            }
+        });
+        
+        if ($('#select-carteira option:selected').text() == "BitCoin") {
+            $.ajax({
+                type: "post",
+                data: {
+                    'Valor': valor,
+                    'Guid': saque['Guid']
+                },
+                url: 'http://' + ip + '/Financeiro/BitCoinToDolarTaxa',
+                timeout: Tempoajax,
+                success: function (resultado) {
+                    $('#valor_bitcoin').val(resultado);
+       
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    myApp.hidePreloader();
+                    myApp.alert('Erro de Conexão', 'Valor do Bitcoin', function () {
+                        fecharApp();
+                    });
+                }
+
+            });
+        }
+
+        $('#select-carteira').on('change', function (e) {
+
+            if ($('#select-carteira option:selected').text() == "Conta Bancária") {
+                $('#carteira_conta').removeClass('show');
+                $('#valor_bitcoin').addClass('hidden');
+                $('#valor_bitcoin').removeClass('show');
+                $('#carteira_conta').addClass('hidden');
+                $('#conta_corrente').removeClass('hidden');
+                $('#conta_corrente').addClass('show');
+                $('#conta').removeAttr('required');
+                $("#conta").rules("remove");
+                $('#select_conta_corrente').each(function () {
+                    $(this).rules('add', {
+                        required: true,
+                        messages: {
+                            required: "É necessário uma conta corrente para deposito"
+                        }
+                    });
+              
+                });
+                
+            } else {
+                if ($('#select-carteira option:selected').text() == "BitCoin") {
+                    $('#conta_corrente').removeClass('show');
+                    $('#conta_corrente').addClass('hidden');
+                    $('#carteira_conta').removeClass('hidden');
+                    $('#carteira_conta').addClass('show');
+                    $('#valor_bitcoin').addClass('show');
+                    $('#valor_bitcoin').removeClass('hidden');
+                    $('#valor_bitcoin').removeClass('hidden');
+                    $("#select_conta_corrente").rules("remove");
+                    $('#conta').attr('required', 'required');
+                    $('#conta').each(function () {
+                        $(this).rules('add', {
+                            required: true,
+                            messages: {
+                                required: "É necessário uma carteira de Bitcoin"
+                            }
+                        });
+                    });
+                   
+
+                } else {
+                    $('#valor_bitcoin').addClass('hidden');
+                    $('#valor_bitcoin').removeClass('show');
+                    $('#conta_corrente').removeClass('show');
+                    $('#conta_corrente').addClass('hidden');
+                    $('#carteira_conta').removeClass('show');
+                    $('#carteira_conta').addClass('hidden');
+                    $('#conta').removeAttr('required');
+                    $("#conta").rules("remove");
+                    $("#select_conta_corrente").rules("remove");
+                   
+                }
+            }
+            if ($('#select-carteira option:selected').text() == "BitCoin") {
+                var valor = $('#valor').val().split(',')[0].replace(".", "");
+                $.ajax({
+                    type: "post",
+                    data: {
+                        'Valor': valor,
+                        'Guid': saque['Guid']
+                    },
+                    url: 'http://' + ip + '/Financeiro/BitCoinToDolarTaxa',
+                    timeout: Tempoajax,
+                    success: function (resultado) {
+                        $('#valorbitcoin').val(resultado);
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        myApp.hidePreloader();
+                        myApp.alert('Erro de Conexão', 'Valor do Bitcoin', function () {
+                            fecharApp();
+                        });
+                    }
+
+                });
+            }
+
+
+        });
+        $('#valor').on('change', function (e) {
+            var valor = $('#valor').val();
+            $('#valor').val(numeroParaMoeda(valor, 2, ',', '.'));
+            var IDCarteira = $('#select-carteira option:selected').val();
+            $.ajax({
+                type: "post",
+                data: {
+                    'Valor': valor,
+                    'Guid': saque['Guid']
+                },
+                url: 'http://' + ip + '/Financeiro/GetTaxaSaque',
+                timeout: Tempoajax,
+                success: function (resultado) {
+                    $('#taxa').val(resultado);
+              
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    myApp.hidePreloader();
+                    myApp.alert('Erro de Conexão', 'Taxa de saque', function () {
+                        fecharApp();
+                    });
+                }
+
+            });
+
+            if ($('#select-carteira option:selected').text() == "BitCoin") {
+                var valor = $('#valor').val().split(',')[0].replace(".", "");
+                $.ajax({
+                    type: "post",
+                    data: {
+                        'Valor': valor,
+                        'Guid': saque['Guid']
+                    },
+                    url: 'http://' + ip + '/Financeiro/BitCoinToDolarTaxa',
+                    timeout: Tempoajax,
+                    success: function (resultado) {
+                        $('#valorbitcoin').val(resultado);
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        myApp.hidePreloader();
+                        myApp.alert('Erro de Conexão', 'Taxa de Saque', function () {
+                            fecharApp();
+                        });
+                    }
+
+                });
+            }
+
+        });
+
+    
+
+    }
+    if (page.name === 'pagamento') {
+        $('#formPagamento').validate({
+            rules: {
+                senha: { required: true, minlength: 3 },
+                codigo: { required: true }
+            },
+            messages: {
+                senha: { required: 'Informe sua senha', minlength: 'No mínimo 3 caracteres' },
+                codigo: { required: 'Digite o codigo a ser pago' }
+            },
+            errorPlacement: function (error, element) {
+                error.insertBefore(element);
+            },
+
+            submitHandler: function (form) {
+                
+                renderEfetivarPagamento();
+
+                return false;
+            }
+        });
+
+        $('#codigo').on('change', function (e) {
+            var valor = $('#codigo').val();
+            $.ajax({
+                type: "post",
+                data: {
+                    'ID': valor,
+                    'IDCarteira': model['ID']
+                },
+                url: 'http://' + ip + '/Financeiro/SearchFatura',
+                success: function (resultado) {
+
+                    if (resultado['hasError']==true) {
+                        myApp.alert(resultado['Error'], '');
+                    }
+                    else {
+                        $('#login').val(resultado['Login']);
+                        $('#valor').val(resultado['Valor']);
+                        $('#descricao').val(resultado['Descricao']);
+                        $('#taxa').val(resultado['ValorTaxa']);
+                        
+                    }
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    myApp.hidePreloader();
+                    myApp.alert('Erro de Conexão', 'Buscar codigo', function () {
+                        fecharApp();
+                    });
+                }
+
+            });
+        });
+    }
+    if (page.name === 'rede') {
+        $(document).ready(function () {
+            $("#tree").explr();
+        });
     }
 });

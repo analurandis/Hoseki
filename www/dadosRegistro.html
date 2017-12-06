@@ -1,0 +1,196 @@
+﻿
+<div class="pages" id="iddadosregistro">
+    <div data-page="dadosRegistro" class="page no-toolbar no-navbar">
+        <div class="page-content">
+
+            <div id="navbarLink" class="navbarpages">
+                <div class="navbar_home_link"><a href="index.html" onclick="renderPaginaInicial()"><img src="images/icons/white/home.png" alt="" title="" /></a></div>
+                <div class="navbar_page_center">Dados Registro</div>
+                <div class="menu_open_icon_white"><a href="#" class="open-panel"><img src="images/menu_open.png" alt="" title="" /></a></div>
+            </div>
+            <div id="navbarUnico" class="navbarpages unico hidden">
+                
+                <div class="navbar_page_center">Dados Registro</div>
+                
+            </div>
+
+            <div id="pages_maincontent">
+                <div class="col-100" id="editarDados">
+                    <a href="#" class="button button-big " onclick="renderDadosRegistroEditar()"><i class="fa fa-edit icon-pg"></i> Editar Dados</a>
+                </div>
+                
+                    <div class="dados-registro">
+                        <form id="formDadosRegistro" method="post">
+                            <div id="dadosform" class="hidden">
+                                <div class="row">
+                                    <div class="col-50">
+                                        <button type="submit" name="submit" class="button button-big button_ok" value="salvar"><i class="fa-icon fa fa-floppy-o  icon-sa "></i>Salvar</button>
+                                    </div>
+                                    <div class="col-50">
+                                        <a href="dados.html" id="voltar_dados" class="button button_voltar button-big"><i class="fa fa-undo icon-pg "></i>  Voltar</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-block">
+
+                                <ul>
+                                    <!-- NOME -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Nome</div>
+                                                <div class="item-input">
+                                                    <input disabled id="nome" name="nome" type="text" placeholder="Seu Nome" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- DOCUMENTO -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Documento</div>
+                                                <div class="item-input">
+                                                    <input disabled id="documento" name="documento" type="text" placeholder="Numero do Documento">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- E-MAIL -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">E-mail</div>
+                                                <div class="item-input">
+                                                    <input disabled id="email" name="email" type="email" placeholder="E-mail">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- ENDEREÇO -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Endereço</div>
+                                                <div class="item-input">
+                                                    <input disabled id="endereco" name="endereco" type="text" placeholder="Endereço rua, av, rodovia">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- NÚMERO -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Número</div>
+                                                <div class="item-input">
+                                                    <input disabled id="numero" name="numero" type="text" placeholder="Numero da residencia">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- CEP -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">CEP</div>
+                                                <div class="item-input">
+                                                    <input disabled id="cep" name="cep" type="text" placeholder="CEP">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- CIDADE -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Cidade</div>
+                                                <div class="item-input">
+                                                    <input disabled id="cidade" name="cidade" type="text" placeholder="Nome da cidade">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- BAIRRO -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Bairro</div>
+                                                <div class="item-input">
+                                                    <input disabled id="bairro" name="bairro" type="text" placeholder="Nome do bairro">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- COMPLEMENTO -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Complemento</div>
+                                                <div class="item-input">
+                                                    <input disabled id="complemento" name="complemento" type="text" placeholder="Casa, apartamento, bloco, etc">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                    <!-- PAÍS -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">País</div>
+                                                <div class="item-input">
+                                                    <select disabled id="pais"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <!-- ESTADO -->
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">Estado</div>
+                                                <div class="item-input">
+                                                    <input disabled id="estado" name="estado" type="text" placeholder="Nome do estado">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+
+                </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

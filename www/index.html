@@ -19,6 +19,8 @@
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700,900' rel='stylesheet' type='text/css'>
     <link href="css/framework7-icons.css" rel="stylesheet" />
     <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link href="css/jquery-explr-1.4.css" rel="stylesheet" type="text/css">
 </head>
 <body id="mobile_wrap">
 
@@ -34,16 +36,20 @@
             </div>
          
                 <ul id="nav">
-                    <li class="home-icon"><a href="index.html" onclick="renderPaginaInicial()" class="close-panel">Pagina Inicial</a></li>
+                    <li class="home-icon"><a id="index" href="#" onclick="renderPaginaInicial()" class="close-panel">Pagina Inicial</a></li>
                     <li class="investimento-icon"><a href="Investimentos.html" id="pagina_investimento" onclick="renderInvestimentos()" class="close-panel">Investimentos</a></li>
-                    <li class="upgrade-icon"><a href="index.html" id="pagina_upgrade" class="close-panel">Upgrade</a></li>
-                    <li class="rede-icon"><a href="about.html" id="pagina_rede" class="close-panel">Rede</a></li>
+                    <li class="upgrade-icon"><a href="upgrade.html" id="pagina_upgrade" class="close-panel" onclick="renderUpgrade()">Upgrade</a></li>
+                    <li class="carteira-icon"><a href="rendimentos.html" id="pagina_rendimentos" class="close-panel" onclick="renderRendimentos()">Rendimentos</a></li>
+                    <li class="rede-icon"><a href="rede.html" id="pagina_rede" onclick="renderRedeLinear()" class="close-panel" >Rede</a></li>
                     <li class="money-icon"><a href="fatura.html" id="pagina_fatura" onclick="renderFatura()" class="close-panel">Fatura</a></li>
                     <li class="dolar-icon">
                         <a href="financeiro.html" id="pagina_financeiro" onclick="renderFinanceiro()" class="close-panel">Financeiro</a>
                     </li>
+                    <li class="dados-icon">
+                        <a href="dados.html"  class="close-panel">Meus Dados</a>
+                    </li>
 
-                    <li class="dados-icon"><a href="#" id="pagina_dados" class="close-panel">Meus Dados</a></li>
+                  
                     <li class="exit-icon"><a href="index.html" onclick="fecharApp()" id="pagina_sair" class="close-panel">Sair</a></li>
 
                 </ul>
@@ -68,79 +74,94 @@
 
                 <div data-page="index" class="page homepage">
                     <div class="page-content">
+                        <div id="pages_maincontent">
+                            <div class="list-block cards-list" id="cardInicio">
+                                <ul class="list_detailed retorno">
 
-                        <div class="swiper-container swiper-init" data-effect="coverflow" data-pagination=".swiper-pagination">
-                            <div class="swiper-wrapper">
-
-
-                                <div id="pages_maincontent">
-                                    <ul class="features_list_detailed retorno">
-
-                                        <li>
-                                            <div class="feat_small_icon">
+                                    <li class="card">
+                                        <div class="card-header"><p>Plano Atual</p></div>
+                                        <div class="card-content">
+                                            <div class="small_icon">
                                                 <img src="images/plano.png" alt="" title="" />
                                             </div>
-                                            <div class="feat_small_details">
-                                                <h4>Plano Atual</h4>
+                                            <div class="small_details">
                                                 <p id="plano-atual"> </p>
-
-
-
                                             </div>
-                                        </li>
+                                        </div>
+                                    </li>
 
-                                        <li>
-                                            <div class="feat_small_icon"><div class="sumary-icon bg-info"><i class="fa fa-usd"></i></div></div>
-                                            <div class="feat_small_details">
-                                                <h4>Saldo</h4>
+                                    <li class="card">
+                                        <div class="card-header"><p>Seus Diretos</p></div>
+                                        <div class="card-content">
+                                            <div class="small_icon"><div class="sumary-icon bg-info"><i class="fa fa-user"></i></div></div>
+                                            <div class="small_details">
+
+                                                <p id="diretos"> </p>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="card">
+                                        <div class="card-header"><p>Saldo</p></div>
+                                        <div class="card-content">
+                                            <div class="small_icon"><div class="sumary-icon bg-info"><i class="fa fa-usd"></i></div></div>
+                                            <div class="small_details">
+
                                                 <p id="saldo"> </p>
-                                                <p id="total-investido">Total de Investimento: </p>
+                                                <!--  <p id="total-investido">Total de Investimento: </p>-->
 
                                             </div>
-                                        </li>
+                                        </div>
+                                    </li>
 
-                                        <li>
-                                            <div class="feat_small_icon">
+                                    <li class="card">
+                                        <div class="card-header"><p>Binário Ativo</p></div>
+                                        <div class="card-content">
+                                            <div class="small_icon">
                                                 <div id="binario" class="sumary-icon"><i class="fa fa-sitemap"></i></div>
                                             </div>
-                                            <div class="feat_small_details">
-                                                <h4>Binário Ativo</h4>
+                                            <div class="small_details">
+
                                                 <p id="binario-ativo"></p>
 
                                             </div>
-                                        </li>
+                                        </div>
+                                    </li>
 
-                                        <li>
-                                            <div class="feat_small_icon">
+                                    <li class="card">
+                                        <div class="card-header"><p>Situação</p></div>
+                                        <div class="card-content">
+                                            <div class="small_icon">
                                                 <div id="situ" class="sumary-icon">
                                                     <i class="fa fa-check"></i>
                                                 </div>
                                             </div>
-                                            <div class="feat_small_details">
-                                                <h4>Situação</h4>
+                                            <div class="small_details">
+
                                                 <p id="situacao"></p>
 
                                             </div>
-                                        </li>
-                                    </ul>
+                                        </div>
+                                    </li>
 
-                                </div>
+                                </ul>
                             </div>
+
+
+
 
                         </div>
                     </div>
+
+      </div>
+                    </div>
                 </div>
-            </div>
-
-
-
-        </div>
-
+      
          <div class="login-screen modal-in ">
            <!--  <div class="login-screen  ">-->
             <div class="view">
                 <div class="page ">
-                    <div class="page-content login-screen-content login">
+                    <div class="page-content  login">
                         <div class="login-screen-title ">
                             <div class="logo-titulo">
                                 <img src="images/logo_hoseki.png" alt="" title="" />
@@ -152,55 +173,49 @@
                         <div class="loginform">
                             <form id="form1" method="post">
 
-                                <fieldset data-role="fieldcontainer">
-                                    <ul>
-                                        <li class="user-icon"><label for="login">Login</label></li>
-                                    </ul>
-                                    <input id="login" name="login" type="text" value="" class="form_input required" /></li>
-
-                                </fieldset>
-                                <fieldset data-role="fieldcontainer">
-                                    <ul>
-                                        <li class="lock-icon"><label for="senha">Senha</label></li>
-                                    </ul>
-                                    <input id="senha" name="senha" type="password" class="form_input required" />
-                                </fieldset>
-                                <input type="submit" name="submit" class="form_submit " id="logar" value="Login" />
-                                <div class="hidden" id="loader"> <img src="css/img/loading.gif" /></div>
-                            </form>
+                                    <div class="list-block">
+                                        <ul>
+                                            
+                                            <li>
+                                                <div class="item-content">
+                                                    <div class="item-media"><i class="icon fa fa-user"></i></div>
+                                                    <div class="item-inner">
+                                                        <div class="item-input">
+                                                            <input id="login" name="login" type="text" value=""  placeholder="Login"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            </ul>
+                                        <ul>
+                                            <li>
+                                                <div class="item-content">
+                                                    <div class="item-media"><i class="icon fa fa-lock"></i></div>
+                                                    <div class="item-inner">
+                                                        <div class="item-input">
+                                                            <input id="senha" name="senha" type="password" placeholder="Senha" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 
+                                    <input type="submit" name="submit" class="form_submit " id="logar" value="Login" />
+                                    <div class="hidden" id="loader"> <img src="css/img/loading.gif" /></div>
+</form>
 
                         </div>
 
-
-                        <!--
-                                                <div class="list-block">
-                                                    <ul>
-                                                        <li><a href="#" class=" item-link list-button">Log In</a></li>
-                                                    </ul>
-                                                    <div class="list-block-label">
-                                                        <p><a href="#" class="close-login-screen">Click here to close Login Screen</a></p>
-                                                    </div>
-                                                </div>
-                        -->
                     </div>
                 </div>
-               <!-- <div class="toolbar">
-                    <div class="toolbar-inner">
-                        <ul class="toolbar_icons icons_4row logo-fundo">
-                            <li><img src="images/icons/white/user.png" alt="" title="" /></li>
-
-
-                        </ul>
-                    </div>
-                </div>
-                -->
+        
             </div>
 
         </div>
     </div>
     <script></script>
     <script>
-        // Here you can initialize the app
 
     </script>
     <script src="js/jquery.min.js"></script>
@@ -223,6 +238,8 @@
     <script type="text/javascript" src="js/app.js"></script>
     <script src="js/index.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/jquery-explr-1.4.js"></script>
+
 
     <script>
         $(document).ready(function () {
@@ -276,7 +293,7 @@
             },
             submitHandler: function (form) {
 
-                myApp.showPreloader();
+                myApp.showPreloader('Acessando sua conta ...');
                 $('#logar').hide();
                
 
@@ -324,7 +341,6 @@
                     var URL = 'http://' + ip + '/LoginApp/LoginCadastroDispositivo';
 
                 }
-
                 $.ajax({
                    
                     type: "post",
@@ -345,33 +361,25 @@
                             storage.setItem('token', token);
                             user = resultado['dados'];
                        
-                            myApp.alert('Login realizado com sucesso', 'Login', function () {
+                            myApp.alert('Login realizado com sucesso', '',function () {
                                 
-                                renderPaginaInicial();
+                               
                                 myApp.closeModal('.login-screen');
+                                renderPaginaInicial();
 
                             });
-                          /*  navigator.notification.alert(
-                                'Login realizado com sucesso',  // message
-                                alertSucesso,         // callback
-                                'Login',            // title
-                                'ok'                  // buttonName
-                            );
-                            */
-
-
                         }
                         else {
                             $('#logar').show();
                             resp = resultado["retorno"];
                             myApp.hidePreloader();
-                            myApp.alert(resp, 'Login');
+                            myApp.alert(resp,'');
                            
                         };
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         $('#logar').fadeIn();
-                        myApp.alert('Erro de conexão', 'Login');
+                        myApp.alert('Falha na conexão', 'Login');
                         $('#logar').show();
                         myApp.hidePreloader();
                     }

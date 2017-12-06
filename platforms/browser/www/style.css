@@ -1,3 +1,6 @@
+/*
+    VARIÁVEIS
+*/
 
 /*
 [Table of Contents]
@@ -28,16 +31,15 @@
 /* 1. RESET		 						 */
 /*===============================================*/
 @import "css/reset.css";
-
 /*===============================================*/
 /* 2. GENERAL		 						 */
-/*===============================================*/	
+/*===============================================*/
 html,
 body {
-position: relative;
-height: 100%;
-width: 100%;
-overflow-x: hidden;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
 }
 body {
 font-family: 'Source Sans Pro', sans-serif;
@@ -85,12 +87,7 @@ font-size:14px;
 text-transform:uppercase;
 line-height:22px;
 }
-.videocontainer{
-max-width:100%; 
-padding:0; 
-display: block; 
-margin:0;
-}
+
 #mobile_wrap{
 max-width:800px;
 margin:auto;
@@ -647,24 +644,24 @@ float:left;
 
 
 ul.features_list_detailed{
-padding:10px 0 30px 0;
+padding:0px 0 0px 0;
 width:100%;
 margin:0px;
 list-style:none;
 float:left;
 clear:both;
 }
-    ul.features_list_detailed li {
-        padding: 5px 0 10px 5px;
-        margin: 0 0 10px 0;
-        display: block;
-        width: 100%;
-        float: left;
-        clear: both;
-        border-bottom: 1px #ddd solid;
-        background-color: rgba(144,238,144,0.5);
-        border-radius: 5px;
-    }
+ul.features_list_detailed li {
+    padding: 5px 0 10px 5px;
+    margin: 0 0 10px 0;
+    display: block;
+    width: 100%;
+    float: left;
+    clear: both;
+    border-bottom: 1px #ddd solid;
+    background-color: rgba(200,240,220,0.8);
+    border-radius: 5px;
+}
 
 ul.features_list_detailed li .feat_small_icon{
 width:30%;
@@ -678,7 +675,8 @@ padding:0 0 0 3%;
 }
 ul.features_list_detailed li .feat_small_details p{
 padding:0 0 10px 0;
-font-size: 1.8em;
+font-size: 1.2em;
+font-weight:400;
 }
 ul.features_list_detailed li .feat_small_icon img{
 display:inline-block;
@@ -1294,22 +1292,16 @@ top: 50px;
     background-color: #ed9c28;
 }
 .bg-info {
-    background-color: #5bc0de;
-    
+    background-color: #5bc0de;  
 }
-#situacao {
-    font-weight: 600;
-    border-top: solid;
+.bg-ativo {
+    background-color: #2f9d34;
+}
+.bg-negativo {
+    background-color: #e01d1d;
+}
 
-    text-align: center;
-    display: inline-block;
-}
-#binario-ativo {
-    font-weight: 600;
-    
-    text-align: center;
-    display: inline-block;
-}
+
 .logo-titulo {
     /*background-color: rgba(255,255,255,0.3);
     border-top: solid;
@@ -1343,6 +1335,7 @@ top: 50px;
 }
 .esquerda {
     float: right;
+    
     margin-right :10px;
   
 }
@@ -1548,3 +1541,74 @@ th, td {
 #financeiro .features_list_detailed #financeiro_botoes a:hover{
     background-color: #6a9090;
 }
+/* REDE*/
+.redetitulo {
+    font-weight: bold;
+}
+
+
+ul.features_list_detailed li .rede img {
+   
+  
+}
+.ul.features_list_detailed li .rede {
+    width: 10%;
+   
+
+}
+
+.dados-children img ,
+.dados img {
+    position: static;
+    max-width: 100%;
+    min-width:30px;
+
+}
+ 
+.dados div[class*="col-"] {
+    background-color: transparent;
+    text-align: center;
+    color: #000;
+    padding: 0px 0px 0px, 0px;
+    margin-bottom: -30px;
+    font-size: 4vw;
+}
+#rede table thead th {
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 0px;
+    font-size: 2.9vw;
+}
+
+#rede table tr {
+    font-size: 3vw;
+    text-align: center;
+    margin-bottom:0px;
+    padding-bottom: 0px;
+}
+#rede table {
+    width:100%;
+    border-collapse: separate;
+    border-spacing: 0.1em  ;
+}
+.dados-children div[class*="col-"] {
+    background-color: transparent;
+    text-align: center;
+    color: #000;
+    padding: 0px 0px 0px, 0px;
+    margin-bottom: -30px;
+    font-size: 3vw
+}
+#rede .impar {
+    background-color: #76b9b9;
+}
+#rede .par {
+    background-color: #92bdbd;
+    margin-left: +5px;
+}
+#rede ul{
+    margin-top: -40px;
+
+}
+
+

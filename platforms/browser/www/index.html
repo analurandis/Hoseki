@@ -19,6 +19,8 @@
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700,900' rel='stylesheet' type='text/css'>
     <link href="css/framework7-icons.css" rel="stylesheet" />
     <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link href="css/jquery-explr-1.4.css" rel="stylesheet" type="text/css">
 </head>
 <body id="mobile_wrap">
 
@@ -36,14 +38,14 @@
                 <ul id="nav">
                     <li class="home-icon"><a href="index.html" onclick="renderPaginaInicial()" class="close-panel">Pagina Inicial</a></li>
                     <li class="investimento-icon"><a href="Investimentos.html" id="pagina_investimento" onclick="renderInvestimentos()" class="close-panel">Investimentos</a></li>
-                    <li class="upgrade-icon"><a href="index.html" id="pagina_upgrade" class="close-panel">Upgrade</a></li>
-                    <li class="rede-icon"><a href="about.html" id="pagina_rede" class="close-panel">Rede</a></li>
+                   <!-- <li class="upgrade-icon"><a href="index.html" id="pagina_upgrade" class="close-panel">Upgrade</a></li>-->
+                    <li class="rede-icon"><a href="rede.html" id="pagina_rede" onclick="renderRedeLinear()" class="close-panel">Rede</a></li>
                     <li class="money-icon"><a href="fatura.html" id="pagina_fatura" onclick="renderFatura()" class="close-panel">Fatura</a></li>
                     <li class="dolar-icon">
                         <a href="financeiro.html" id="pagina_financeiro" onclick="renderFinanceiro()" class="close-panel">Financeiro</a>
                     </li>
 
-                    <li class="dados-icon"><a href="#" id="pagina_dados" class="close-panel">Meus Dados</a></li>
+                  
                     <li class="exit-icon"><a href="index.html" onclick="fecharApp()" id="pagina_sair" class="close-panel">Sair</a></li>
 
                 </ul>
@@ -68,10 +70,6 @@
 
                 <div data-page="index" class="page homepage">
                     <div class="page-content">
-
-                        <div class="swiper-container swiper-init" data-effect="coverflow" data-pagination=".swiper-pagination">
-                            <div class="swiper-wrapper">
-
 
                                 <div id="pages_maincontent">
                                     <ul class="features_list_detailed retorno">
@@ -101,7 +99,7 @@
 
                                         <li>
                                             <div class="feat_small_icon">
-                                                <div class="sumary-icon bg-warning"><i class="fa fa-sitemap"></i></div>
+                                                <div id="binario" class="sumary-icon"><i class="fa fa-sitemap"></i></div>
                                             </div>
                                             <div class="feat_small_details">
                                                 <h4>Binário Ativo</h4>
@@ -112,7 +110,7 @@
 
                                         <li>
                                             <div class="feat_small_icon">
-                                                <div class="sumary-icon bg-warning">
+                                                <div id="situ" class="sumary-icon">
                                                     <i class="fa fa-check"></i>
                                                 </div>
                                             </div>
@@ -130,12 +128,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-
-
-        </div>
-
+      
          <div class="login-screen modal-in ">
            <!--  <div class="login-screen  ">-->
             <div class="view">
@@ -223,6 +216,8 @@
     <script type="text/javascript" src="js/app.js"></script>
     <script src="js/index.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/jquery-explr-1.4.js"></script>
+
 
     <script>
         $(document).ready(function () {
@@ -276,7 +271,7 @@
             },
             submitHandler: function (form) {
 
-                myApp.showPreloader();
+                myApp.showPreloader('Acessando sua conta ...');
                 $('#logar').hide();
                
 
@@ -344,7 +339,9 @@
                             var token = JSONdata['jwt'];
                             storage.setItem('token', token);
                             user = resultado['dados'];
-                            myApp.alert('Login realizado com sucesso', 'Login', function () {
+                       
+                            myApp.alert('Login realizado com sucesso', '',function () {
+                                
                                 renderPaginaInicial();
                                 myApp.closeModal('.login-screen');
 
@@ -363,13 +360,13 @@
                             $('#logar').show();
                             resp = resultado["retorno"];
                             myApp.hidePreloader();
-                            myApp.alert(resp, 'Login');
+                            myApp.alert(resp,'');
                            
                         };
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         $('#logar').fadeIn();
-                        myApp.alert('Erro de conexão', 'Login');
+                        myApp.alert('Falha na conexão', 'Login');
                         $('#logar').show();
                         myApp.hidePreloader();
                     }

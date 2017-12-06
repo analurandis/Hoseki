@@ -25,6 +25,9 @@
         <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="SQLitePlugin">
+        <param name="android-package" value="io.sqlc.SQLitePlugin" />
+    </feature>
     <name>Hoseki</name>
     <description>Aplicação de dados</description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">AnaLuRandis</author>
@@ -41,10 +44,10 @@
     <access origin="http://localhost:56747/" />
     <access origin="http://192.168.0.11/" />
     <allow-intent href="market:*" />
-    <icon density="ldpi" src="res/icon/android/icon-36-ldpi.png" />
-    <icon density="mdpi" src="res/icon/android/icon-48-mdpi.png" />
-    <icon density="hdpi" src="res/icon/android/icon-72-hdpi.png" />
-    <icon density="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
+    <icon density="ldpi" src="res/icon/android/ldpi.png" />
+    <icon density="mdpi" src="res/icon/android/mdpi.png" />
+    <icon density="hdpi" src="res/icon/android/hdpi.png" />
+    <icon density="xhdpi" src="res/icon/android/xhdpi.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="windows-target-version" value="10.0" />
     <preference name="Fullscreen" value="False" />

@@ -1,0 +1,62 @@
+﻿
+<div class="pages" id="idrendimentos">
+    <div data-page="rendimentos" class="page no-toolbar no-navbar">
+        <div class="page-content">
+
+            <div class="navbarpages">
+                <div class="navbar_home_link"><a href="index.html" onclick="renderPaginaInicial()"><img src="images/icons/white/home.png" alt="" title="" /></a></div>
+                <div class="navbar_page_center">Rendimentos</div>
+                <div class="menu_open_icon_white"><a href="#" class="open-panel"><img src="images/menu_open.png" alt="" title="" /></a></div>
+            </div>
+
+            <div id="pages_maincontent">
+                <div id="buscaRendimentos">
+                    <form id="form-resgatar" class="list-block" method="post">
+                            <ul>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-title label">Tipo</div>
+                                            <select name="select-tipo" id="select-tipo"></select>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-title label">Data inicial</div>
+                                            <div class="item-input">
+                                                <input id="datainicio" name="datainicio" value="" type="date" placeholder="Data inicial">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-title label">Data final</div>
+                                            <div class="item-input">
+                                                <input id="datafinal" name="datafinal" value="" type="date" placeholder="Data final">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="col-100" id="bucarRendimentos">
+                                <a href="#" class="button button-big" id="btn_buscarRendimentos" onclick="renderRendimentosBuscar()"><i class="fa fa-search icon-pg"></i>  Buscar Rendimentos</a>
+                            </div>
+                        </form>
+                        <div id="rendimentos">
+                            <ul class="features_list_detailed"></ul>
+                        </div>
+
+
+</div>
+        </div>
+
+
+
+    </div>
+</div>
+
